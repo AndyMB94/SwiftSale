@@ -51,16 +51,16 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 ## Phase 3 — Sales & POS
 **Goal:** Complete point-of-sale workflow.
 
-- [ ] Cart / sale creation with multiple items
-- [ ] Price snapshot on sale items
-- [ ] Discount application
-- [ ] Tax calculation (IGV 18%)
-- [ ] Sale status transitions (pending → completed → cancelled)
-- [ ] Inventory deduction on sale completion (atomic)
-- [ ] Inventory rollback on sale cancellation
-- [ ] Cashier-facing POS endpoints
-- [ ] Unit tests for pricing and tax logic
-- [ ] Integration tests for full checkout flow
+- [x] Cart / sale creation with multiple items
+- [x] Price snapshot on sale items
+- [x] Discount application
+- [x] Tax calculation (IGV 18%)
+- [x] Sale status transitions (pending → completed → cancelled)
+- [x] Inventory deduction on sale completion (atomic)
+- [x] Inventory rollback on sale cancellation
+- [x] Cashier-facing POS endpoints
+- [x] Unit tests for pricing and tax logic
+- [x] Integration tests for full checkout flow
 
 **Deliverable:** End-to-end sale creation from cart to completion.
 
