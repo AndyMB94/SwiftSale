@@ -19,6 +19,14 @@ WEBHOOK_PROVIDERS = ('yape', 'plin', 'card')
 STALE_PAYMENT_MINUTES = 30
 
 
+def _enqueue_payment_notification(payment_id: str):
+    try:
+        from .tasks import notify_payment_result
+        notify_payment_result.delay(payment_id)
+    except Exception:
+        pass
+
+
 class PaymentService:
 
     @staticmethod
@@ -124,6 +132,9 @@ class PaymentService:
             'payment_id': str(payment.id),
             'new_status': payment.status,
         })
+
+        payment_id = str(payment.id)
+        transaction.on_commit(lambda: _enqueue_payment_notification(payment_id))
 
         return payment
 

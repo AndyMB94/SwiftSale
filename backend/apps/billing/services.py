@@ -11,6 +11,14 @@ from .xml_builder import build_invoice_xml
 IGV_RATE = Decimal('0.18')
 
 
+def _enqueue_receipt(doc_id: str):
+    try:
+        from .tasks import generate_and_send_receipt
+        generate_and_send_receipt.delay(doc_id)
+    except Exception:
+        pass  # Never let task dispatch failure break the request
+
+
 class BillingService:
 
     @staticmethod
@@ -129,6 +137,11 @@ class BillingService:
         except Exception:
             doc.status = BillingDocument.Status.SENT
             doc.save(update_fields=['status'])
+
+        # Trigger PDF generation + email after the transaction commits
+        transaction.on_commit(
+            lambda: _enqueue_receipt(str(doc.id))
+        )
 
         return doc
 

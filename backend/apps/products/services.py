@@ -6,6 +6,14 @@ from ninja.errors import HttpError
 from .models import Category, Product, Inventory, InventoryMovement
 
 
+def _enqueue_low_stock(product_id, quantity: int):
+    try:
+        from .tasks import notify_low_stock
+        notify_low_stock.delay(product_id, quantity)
+    except Exception:
+        pass
+
+
 class CategoryService:
 
     @staticmethod
@@ -168,6 +176,11 @@ class InventoryService:
             reason=reason,
             created_by=created_by,
         )
+
+        if inventory.is_low_stock:
+            pid, qty = product_id, new_quantity
+            transaction.on_commit(lambda: _enqueue_low_stock(pid, qty))
+
         return inventory
 
     @staticmethod
