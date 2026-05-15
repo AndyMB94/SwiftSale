@@ -140,17 +140,20 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 
 ---
 
-## Phase 8 — Observability & DevOps
+## Phase 8 — Observability & DevOps ✅
 **Goal:** Production-grade monitoring and deployment pipeline.
 
-- [ ] Prometheus metrics endpoint
-- [ ] Grafana dashboard setup
-- [ ] Sentry error tracking integration
-- [ ] Rate limiting on auth endpoints
-- [ ] CORS and security headers configuration
-- [ ] Production Docker Compose configuration
-- [ ] Environment-based settings (dev / staging / prod)
-- [ ] Database backup strategy
+- [x] Prometheus metrics endpoint (`GET /metrics`) via django-prometheus — instruments requests, DB queries, cache operations
+- [x] Sentry error tracking integration (Django + Celery + Redis integrations, configured in prod settings)
+- [x] IP-based rate limiting on auth login endpoint (10 req/min, backed by Redis, fails open)
+- [x] Security headers: X-Frame-Options DENY, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy, Permissions-Policy
+- [x] HSTS, Secure cookies, SSL redirect configured in prod settings
+- [x] `/metrics` endpoint blocked from external access via Nginx allow/deny rules
+- [x] Production Docker Compose (`docker-compose.prod.yml`) with Celery worker + beat, resource isolation, restart policies
+- [x] Celery worker + beat added to dev Docker Compose
+- [x] Environment-based settings: `dev.py` / `prod.py` (base shared, overrides per env)
+- [x] Database backup strategy: `backup.sh` (pg_dump + gzip, auto-prunes to last 30) + `restore.sh`
+- [ ] Grafana dashboard — deferred (requires external Prometheus server; `/metrics` endpoint is Grafana-compatible)
 
 **Deliverable:** System is observable, protected, and ready for a production-like environment.
 
