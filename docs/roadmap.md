@@ -33,15 +33,15 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 ## Phase 2 — Product Catalog & Inventory
 **Goal:** Full product management and real-time stock control.
 
-- [ ] Category CRUD
-- [ ] Product CRUD with SKU and barcode support
-- [ ] Soft delete for products
-- [ ] Inventory model with stock level per product
-- [ ] Stock movement audit trail
-- [ ] Low stock alerts
-- [ ] Concurrency-safe stock updates (SELECT FOR UPDATE)
-- [ ] Manual stock adjustments with reason tracking
-- [ ] Unit tests for inventory business logic
+- [x] Category CRUD
+- [x] Product CRUD with SKU and barcode support
+- [x] Soft delete for products
+- [x] Inventory model with stock level per product
+- [x] Stock movement audit trail
+- [x] Low stock alerts
+- [x] Concurrency-safe stock updates (SELECT FOR UPDATE)
+- [x] Manual stock adjustments with reason tracking
+- [x] Unit tests for inventory business logic
 - [ ] Integration tests for stock consistency
 
 **Deliverable:** Products and inventory fully operational with race condition protection.
