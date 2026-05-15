@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from ninja import NinjaAPI
 
 from apps.authentication.api import router as auth_router
@@ -47,4 +47,5 @@ api.add_router('/health', health_router)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', api.urls),
+    path('', include('django_prometheus.urls')),  # exposes GET /metrics
 ]
