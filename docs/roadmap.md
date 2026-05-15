@@ -42,7 +42,7 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 - [x] Concurrency-safe stock updates (SELECT FOR UPDATE)
 - [x] Manual stock adjustments with reason tracking
 - [x] Unit tests for inventory business logic
-- [ ] Integration tests for stock consistency
+- [x] Integration tests for stock consistency
 
 **Deliverable:** Products and inventory fully operational with race condition protection.
 
