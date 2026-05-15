@@ -31,6 +31,7 @@ LOCAL_APPS = [
     'apps.products',
     'apps.sales',
     'apps.payments',
+    'apps.billing',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -133,6 +134,14 @@ SIMPLE_JWT = {
 }
 
 WEBHOOK_SECRET_KEY = config('WEBHOOK_SECRET_KEY', default='dev-webhook-secret')
+
+# SUNAT / Electronic Billing
+COMPANY_RUC = config('COMPANY_RUC', default='20000000001')
+COMPANY_NAME = config('COMPANY_NAME', default='SwiftSale SAC')
+COMPANY_ADDRESS = config('COMPANY_ADDRESS', default='Av. Ejemplo 123, Lima, Peru')
+OSE_PROVIDER = config('OSE_PROVIDER', default='mock')  # 'mock' | 'nubefact'
+NUBEFACT_TOKEN = config('NUBEFACT_TOKEN', default='')
+NUBEFACT_HOMOLOGATION = config('NUBEFACT_HOMOLOGATION', default=True, cast=bool)
 
 CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/1')
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://localhost:6379/2')
