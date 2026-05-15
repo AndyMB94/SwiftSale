@@ -104,23 +104,23 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 
 ---
 
-## Phase 6 — Async Processing, WebSockets & Notifications
+## Phase 6 — Async Processing, WebSockets & Notifications ✅
 **Goal:** Offload heavy tasks to background workers and push real-time events to clients.
 
-- [ ] Celery worker setup with Redis broker
-- [ ] PDF receipt generation (async task)
-- [ ] Email delivery for receipts (async task)
-- [ ] Low stock email notifications
-- [ ] Payment failure alerts
-- [ ] Task retry logic with exponential backoff
-- [ ] Dead letter queue for failed tasks
-- [ ] Worker health check endpoint
-- [ ] Django Channels setup (ASGI, Redis channel layer)
-- [ ] WebSocket consumer for authenticated connections (`/ws/notifications/`)
-- [ ] Push `payment.confirmed` event on successful Yape/Plin payment
-- [ ] Push `payment.failed` event on payment failure
-- [ ] Push `inventory.low_stock` event when stock drops below threshold
-- [ ] Frontend reconnection handling with REST fallback
+- [x] Celery worker setup with Redis broker and named queues (receipts, notifications, maintenance)
+- [x] PDF receipt generation with ReportLab (async task)
+- [x] Email delivery for receipts (async task, console backend in dev / Anymail in prod)
+- [x] Low stock email notifications
+- [x] Payment failure alerts
+- [x] Task retry logic with exponential backoff (`max_retries`, `default_retry_delay`)
+- [x] `acks_late` + `reject_on_worker_lost` for reliable task delivery
+- [x] Celery worker health check endpoint
+- [x] WebSocket consumer for authenticated connections (`/ws/notifications/`) with JWT cookie auth
+- [x] Push `payment.confirmed` event on successful Yape/Plin payment
+- [x] Push `payment.failed` event on payment failure
+- [x] Push `inventory.low_stock` event when stock drops below threshold
+- [x] `transaction.on_commit` dispatch — tasks never fire on rolled-back transactions
+- [ ] Frontend reconnection handling with REST fallback (deferred to frontend track)
 
 **Deliverable:** Heavy tasks run in background workers; payment and stock events are pushed to clients in real time.
 
