@@ -4,7 +4,13 @@ from ninja.errors import HttpError
 
 from .models import User
 from .schemas import LoginInput, LoginOut, MessageOut, UserOut
-from .security import ACCESS_COOKIE, ACCESS_MAX_AGE, REFRESH_COOKIE, REFRESH_MAX_AGE, cookie_auth
+from .security import (
+    ACCESS_COOKIE,
+    ACCESS_MAX_AGE,
+    REFRESH_COOKIE,
+    REFRESH_MAX_AGE,
+    cookie_auth,
+)
 from .services import AuthService
 
 router = Router(tags=['Authentication'])

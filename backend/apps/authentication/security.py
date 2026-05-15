@@ -1,6 +1,6 @@
 from ninja.security import APIKeyCookie
-from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import AccessToken
 
 ACCESS_COOKIE = 'access_token'
 REFRESH_COOKIE = 'refresh_token'

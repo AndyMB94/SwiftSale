@@ -1,10 +1,12 @@
 import uuid
-from ninja import Router
+
 from django.http import HttpRequest
+from ninja import Router
 
 from apps.authentication.security import cookie_auth
 from core.permissions import require_admin_or_supervisor
-from .schemas import SaleCreateInput, SaleOut, SaleListOut
+
+from .schemas import SaleCreateInput, SaleListOut, SaleOut
 from .services import SaleService
 
 router = Router(tags=['Sales'])

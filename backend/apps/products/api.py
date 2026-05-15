@@ -1,16 +1,25 @@
 import uuid
-from ninja import Router
+
 from django.http import HttpRequest
+from ninja import Router
 
 from apps.authentication.security import cookie_auth
 from core.permissions import require_admin, require_admin_or_supervisor
+
 from .schemas import (
-    CategoryCreateInput, CategoryUpdateInput, CategoryOut, CategoryListOut,
-    ProductCreateInput, ProductUpdateInput, ProductOut, ProductListOut,
-    InventoryOut, InventoryAdjustInput, InventoryMovementOut,
+    CategoryCreateInput,
+    CategoryListOut,
+    CategoryOut,
+    CategoryUpdateInput,
+    InventoryAdjustInput,
+    InventoryMovementOut,
+    InventoryOut,
+    ProductCreateInput,
+    ProductListOut,
+    ProductOut,
+    ProductUpdateInput,
 )
-from .services import CategoryService, ProductService, InventoryService
-from .models import Inventory
+from .services import CategoryService, InventoryService, ProductService
 
 router = Router(tags=['Products'])
 

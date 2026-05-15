@@ -1,9 +1,9 @@
 import hashlib
 import hmac
-import uuid
 import logging
-from decimal import Decimal
+import uuid
 from datetime import timedelta
+from decimal import Decimal
 
 from django.conf import settings
 from django.db import transaction
@@ -11,6 +11,7 @@ from django.utils import timezone
 from ninja.errors import HttpError
 
 from apps.sales.models import Sale
+
 from .models import Payment
 
 logger = logging.getLogger(__name__)

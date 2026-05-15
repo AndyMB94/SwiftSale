@@ -1,8 +1,9 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 from ninja.errors import HttpError
 
-from core.ratelimit import check_rate_limit, _get_ip
+from core.ratelimit import _get_ip, check_rate_limit
 
 
 def _make_request(ip='1.2.3.4'):

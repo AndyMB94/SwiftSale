@@ -1,11 +1,12 @@
-import pytest
-from decimal import Decimal
 from datetime import date, timedelta
+from decimal import Decimal
+
+import pytest
 
 from apps.authentication.models import User
-from apps.products.models import Category, Product, Inventory
-from apps.sales.services import SaleService
+from apps.products.models import Category, Inventory, Product
 from apps.reports.services import ReportService
+from apps.sales.services import SaleService
 
 
 @pytest.fixture

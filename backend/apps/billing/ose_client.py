@@ -1,4 +1,3 @@
-import hashlib
 import base64
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -29,7 +28,7 @@ class MockOseClient(OseClientInterface):
             accepted=True,
             cdr_content=fake_cdr,
             response_code='0',
-            description='La Factura numero {}, ha sido aceptada'.format(full_number),
+            description=f'La Factura numero {full_number}, ha sido aceptada',
         )
 
 

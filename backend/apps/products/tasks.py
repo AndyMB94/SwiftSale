@@ -1,4 +1,5 @@
 import logging
+
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
@@ -50,8 +51,8 @@ def notify_low_stock(self, product_id: int, current_quantity: int):
 
 
 def _push_low_stock(product, current_quantity: int):
-    from channels.layers import get_channel_layer
     from asgiref.sync import async_to_sync
+    from channels.layers import get_channel_layer
 
     channel_layer = get_channel_layer()
     if channel_layer is None:

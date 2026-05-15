@@ -1,8 +1,8 @@
 import uuid
-from decimal import Decimal
 from datetime import datetime
-from ninja import Schema
+from decimal import Decimal
 
+from ninja import Schema
 
 # ── Category ────────────────────────────────────────────────────────────────
 

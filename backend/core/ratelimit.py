@@ -1,4 +1,5 @@
 from functools import wraps
+
 from django_redis import get_redis_connection
 from ninja.errors import HttpError
 

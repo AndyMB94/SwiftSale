@@ -1,4 +1,5 @@
 import logging
+
 from celery import shared_task
 
 logger = logging.getLogger(__name__)
@@ -52,8 +53,8 @@ def reconcile_stale_payments_task():
 
 
 def _push(group: str, payload: dict):
-    from channels.layers import get_channel_layer
     from asgiref.sync import async_to_sync
+    from channels.layers import get_channel_layer
 
     channel_layer = get_channel_layer()
     if channel_layer is None:

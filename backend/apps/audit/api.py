@@ -1,10 +1,11 @@
 from datetime import date
-from typing import List
+
 from ninja import Router
 from ninja.errors import HttpError
 
 from apps.authentication.models import User
 from apps.authentication.security import CookieJWTAuth
+
 from .models import AuditLog
 from .schemas import AuditLogOut
 
@@ -17,7 +18,7 @@ def _require_admin(request):
         raise HttpError(403, 'Admin access required')
 
 
-@router.get('', response=List[AuditLogOut], auth=auth)
+@router.get('', response=list[AuditLogOut], auth=auth)
 def list_audit_logs(
     request,
     action: str | None = None,

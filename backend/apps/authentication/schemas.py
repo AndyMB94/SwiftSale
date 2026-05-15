@@ -1,4 +1,5 @@
 import uuid
+
 from ninja import Schema
 from pydantic import EmailStr
 

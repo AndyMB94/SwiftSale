@@ -1,4 +1,5 @@
 from ninja.errors import HttpError
+
 from apps.authentication.models import User
 
 

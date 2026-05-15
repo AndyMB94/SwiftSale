@@ -1,9 +1,11 @@
 import uuid
+
 from ninja import Router
 from ninja.errors import HttpError
 
 from apps.authentication.security import cookie_auth
 from core.permissions import require_admin, require_admin_or_supervisor
+
 from .schemas import UserCreateInput, UserListOut, UserOut, UserUpdateInput
 from .services import UserService
 

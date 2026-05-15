@@ -1,6 +1,6 @@
 import pytest
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.authentication.models import User
 from apps.authentication.services import AuthService

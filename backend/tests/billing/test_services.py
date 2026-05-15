@@ -1,14 +1,15 @@
-import pytest
 from decimal import Decimal
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
+import pytest
 from ninja.errors import HttpError
 
 from apps.authentication.models import User
-from apps.products.models import Category, Product, Inventory
-from apps.sales.services import SaleService
 from apps.billing.models import BillingDocument, BillingSeries
-from apps.billing.services import BillingService
 from apps.billing.ose_client import MockOseClient, OseResponse
+from apps.billing.services import BillingService
+from apps.products.models import Category, Inventory, Product
+from apps.sales.services import SaleService
 
 
 @pytest.fixture
@@ -194,7 +195,7 @@ class TestIssueDocument:
         assert doc.status == BillingDocument.Status.ACCEPTED
 
     def test_correlativo_increments_sequentially(self, db, completed_sale, boleta_series, sample_items, cashier):
-        category = Category.objects.get(name='Abarrotes')
+        Category.objects.get(name='Abarrotes')
         product = Product.objects.get(sku='AQ-500')
 
         doc1 = BillingService.issue_document(

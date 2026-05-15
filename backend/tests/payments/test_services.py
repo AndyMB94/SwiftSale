@@ -1,14 +1,15 @@
 import hashlib
 import hmac
-import pytest
 from decimal import Decimal
+
+import pytest
 from ninja.errors import HttpError
 
 from apps.authentication.models import User
-from apps.products.models import Category, Product, Inventory
-from apps.sales.services import SaleService
 from apps.payments.models import Payment
 from apps.payments.services import PaymentService
+from apps.products.models import Category, Inventory, Product
+from apps.sales.services import SaleService
 
 
 @pytest.fixture
@@ -262,8 +263,9 @@ class TestWebhookSignature:
 class TestReconciliation:
 
     def test_reconcile_marks_stale_pending_as_failed(self, db, cashier, completed_sale):
-        from django.utils import timezone
         from datetime import timedelta
+
+        from django.utils import timezone
 
         payment, _ = PaymentService.process_payment(
             sale_id=completed_sale.id,
@@ -283,8 +285,9 @@ class TestReconciliation:
         assert payment.status == Payment.Status.FAILED
 
     def test_reconcile_does_not_affect_paid_payments(self, db, cashier, completed_sale):
-        from django.utils import timezone
         from datetime import timedelta
+
+        from django.utils import timezone
 
         payment, _ = PaymentService.process_payment(
             sale_id=completed_sale.id,

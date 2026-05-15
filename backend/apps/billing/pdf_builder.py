@@ -1,11 +1,12 @@
 import io
 from decimal import Decimal
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import cm
+
 from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.units import cm
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 
 def build_receipt_pdf(
@@ -38,7 +39,7 @@ def build_receipt_pdf(
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle('title', parent=styles['Heading1'], alignment=TA_CENTER, fontSize=14)
     center_style = ParagraphStyle('center', parent=styles['Normal'], alignment=TA_CENTER)
-    right_style = ParagraphStyle('right', parent=styles['Normal'], alignment=TA_RIGHT)
+    _right_style = ParagraphStyle('right', parent=styles['Normal'], alignment=TA_RIGHT)
     normal = styles['Normal']
 
     doc_type_label = 'BOLETA DE VENTA ELECTRÓNICA' if document_type == 'boleta' else 'FACTURA ELECTRÓNICA'

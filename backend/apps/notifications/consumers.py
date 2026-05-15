@@ -1,7 +1,8 @@
 import json
+
 from channels.generic.websocket import AsyncWebsocketConsumer
-from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
@@ -38,6 +39,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def _authenticate(self):
         from channels.db import database_sync_to_async
+
         from apps.authentication.models import User
         from apps.authentication.security import ACCESS_COOKIE
 

@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
-from xml.dom import minidom
 from decimal import Decimal
+from xml.dom import minidom
 
 # UBL 2.1 namespace URIs
 NS_INV = 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2'

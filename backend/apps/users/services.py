@@ -1,4 +1,5 @@
 import uuid
+
 from apps.authentication.models import User
 
 
@@ -48,8 +49,8 @@ class UserService:
         user.save()
 
         if is_active is False and was_active:
-            from apps.audit.services import log_action
             from apps.audit.models import AuditLog
+            from apps.audit.services import log_action
             log_action(
                 action=AuditLog.Action.USER_DEACTIVATED,
                 target_type='user',

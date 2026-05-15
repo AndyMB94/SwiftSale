@@ -1,7 +1,8 @@
-from decimal import Decimal
 from datetime import datetime
-from uuid import UUID
+from decimal import Decimal
 from typing import Literal
+from uuid import UUID
+
 from ninja import Schema
 
 

@@ -1,9 +1,10 @@
-import pytest
 from decimal import Decimal
+
+import pytest
 from ninja.errors import HttpError
 
-from apps.products.models import Category, Product, Inventory, InventoryMovement
-from apps.products.services import CategoryService, ProductService, InventoryService
+from apps.products.models import Category, Inventory, InventoryMovement, Product
+from apps.products.services import CategoryService, InventoryService, ProductService
 
 
 @pytest.fixture

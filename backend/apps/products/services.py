@@ -1,9 +1,10 @@
 import uuid
 from decimal import Decimal
+
 from django.db import transaction
 from ninja.errors import HttpError
 
-from .models import Category, Product, Inventory, InventoryMovement
+from .models import Category, Inventory, InventoryMovement, Product
 
 
 def _enqueue_low_stock(product_id, quantity: int):
@@ -129,8 +130,8 @@ class ProductService:
         product.save()
 
         if 'price' in kwargs and kwargs['price'] is not None and kwargs['price'] != old_price:
-            from apps.audit.services import log_action
             from apps.audit.models import AuditLog
+            from apps.audit.services import log_action
             log_action(
                 action=AuditLog.Action.PRICE_CHANGE,
                 target_type='product',
@@ -189,8 +190,8 @@ class InventoryService:
             created_by=created_by,
         )
 
-        from apps.audit.services import log_action
         from apps.audit.models import AuditLog
+        from apps.audit.services import log_action
         log_action(
             action=AuditLog.Action.STOCK_EDIT,
             target_type='inventory',

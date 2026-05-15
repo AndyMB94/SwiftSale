@@ -1,11 +1,11 @@
-from decimal import Decimal
 from datetime import date
+from decimal import Decimal
 
-from django.db.models import Sum, Count, F, ExpressionWrapper, DecimalField
+from django.db.models import Count, DecimalField, ExpressionWrapper, F, Sum
 from django.db.models.functions import TruncDate
 
-from apps.sales.models import Sale, SaleItem
 from apps.products.models import Inventory
+from apps.sales.models import Sale, SaleItem
 
 
 class ReportService:

@@ -1,15 +1,16 @@
-import pytest
 from decimal import Decimal
 
+import pytest
+
+from apps.audit.models import AuditLog
 from apps.authentication.models import User
 from apps.authentication.services import AuthService
-from apps.products.models import Category, Product, Inventory
-from apps.products.services import ProductService, InventoryService
-from apps.sales.services import SaleService
 from apps.billing.models import BillingSeries
 from apps.billing.services import BillingService
+from apps.products.models import Category, Inventory, Product
+from apps.products.services import InventoryService, ProductService
+from apps.sales.services import SaleService
 from apps.users.services import UserService
-from apps.audit.models import AuditLog
 
 
 @pytest.fixture

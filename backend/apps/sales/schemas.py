@@ -1,6 +1,7 @@
 import uuid
-from decimal import Decimal
 from datetime import datetime
+from decimal import Decimal
+
 from ninja import Schema
 
 

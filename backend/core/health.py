@@ -1,8 +1,7 @@
-from ninja import Router
-from ninja import Schema
-from django.db import connection, OperationalError
-from decouple import config
 import redis as redis_lib
+from decouple import config
+from django.db import OperationalError, connection
+from ninja import Router, Schema
 
 router = Router(tags=['Health'])
 

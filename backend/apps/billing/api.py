@@ -1,13 +1,12 @@
 from uuid import UUID
-from decimal import Decimal
-from typing import List
+
 from ninja import Router
 from ninja.errors import HttpError
-from ninja.security import django_auth
 
 from apps.authentication.security import CookieJWTAuth
+
 from .models import BillingDocument
-from .schemas import IssueBoletaIn, IssueFacturaIn, BillingDocumentOut, VoidDocumentIn
+from .schemas import BillingDocumentOut, IssueBoletaIn, IssueFacturaIn, VoidDocumentIn
 from .services import BillingService
 
 router = Router(tags=['billing'])
@@ -78,7 +77,7 @@ def issue_factura(request, payload: IssueFacturaIn):
     return _doc_to_out(doc)
 
 
-@router.get('', response=List[BillingDocumentOut], auth=auth)
+@router.get('', response=list[BillingDocumentOut], auth=auth)
 def list_documents(request):
     docs = BillingDocument.objects.select_related('series').order_by('-issued_at')
     return [_doc_to_out(d) for d in docs]

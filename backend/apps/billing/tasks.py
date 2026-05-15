@@ -1,4 +1,5 @@
 import logging
+
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import EmailMessage
@@ -86,8 +87,8 @@ def generate_and_send_receipt(self, billing_document_id: str):
 
 def _push_receipt_ready(doc):
     """Push a WebSocket notification to the cashier who made the sale."""
-    from channels.layers import get_channel_layer
     from asgiref.sync import async_to_sync
+    from channels.layers import get_channel_layer
 
     cashier_id = str(doc.sale.cashier_id)
     channel_layer = get_channel_layer()

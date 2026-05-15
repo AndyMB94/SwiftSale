@@ -1,10 +1,11 @@
-import pytest
 from decimal import Decimal
+
+import pytest
 from ninja.errors import HttpError
 
 from apps.authentication.models import User
-from apps.products.models import Category, Product, Inventory, InventoryMovement
-from apps.sales.models import Sale, SaleItem
+from apps.products.models import Category, Inventory, InventoryMovement, Product
+from apps.sales.models import Sale
 from apps.sales.services import SaleService
 
 

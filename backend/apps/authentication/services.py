@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
 
@@ -10,8 +10,8 @@ class AuthService:
     def login(email: str, password: str) -> tuple[User, str, str]:
         user = authenticate(username=email, password=password)
         if user is None:
-            from apps.audit.services import log_action
             from apps.audit.models import AuditLog
+            from apps.audit.services import log_action
             log_action(
                 action=AuditLog.Action.LOGIN_FAILED,
                 target_type='user',

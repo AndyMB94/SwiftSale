@@ -1,4 +1,5 @@
 from decimal import Decimal
+
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
@@ -166,8 +167,8 @@ class BillingService:
         doc.voided_at = timezone.now()
         doc.save(update_fields=['status', 'voided_at'])
 
-        from apps.audit.services import log_action
         from apps.audit.models import AuditLog
+        from apps.audit.services import log_action
         log_action(
             action=AuditLog.Action.DOCUMENT_VOIDED,
             target_type='billing_document',

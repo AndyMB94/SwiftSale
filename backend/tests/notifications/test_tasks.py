@@ -1,14 +1,15 @@
-import pytest
 from decimal import Decimal
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
+import pytest
 
 from apps.authentication.models import User
-from apps.products.models import Category, Product, Inventory
-from apps.sales.services import SaleService
+from apps.billing.models import BillingSeries
+from apps.billing.services import BillingService
 from apps.payments.models import Payment
 from apps.payments.services import PaymentService
-from apps.billing.models import BillingSeries, BillingDocument
-from apps.billing.services import BillingService
+from apps.products.models import Category, Inventory, Product
+from apps.sales.services import SaleService
 
 
 @pytest.fixture
@@ -133,6 +134,7 @@ class TestGenerateAndSendReceiptTask:
 
     def test_task_skips_gracefully_for_missing_document(self, db):
         import uuid
+
         from apps.billing.tasks import generate_and_send_receipt
         # Should not raise
         generate_and_send_receipt(str(uuid.uuid4()))
@@ -181,6 +183,7 @@ class TestNotifyPaymentResultTask:
 
     def test_task_skips_gracefully_for_missing_payment(self, db):
         import uuid
+
         from apps.payments.tasks import notify_payment_result
         notify_payment_result(str(uuid.uuid4()))
 
@@ -213,8 +216,9 @@ class TestNotifyLowStockTask:
 
 class TestReconcileStaleTask:
     def test_reconcile_task_returns_count(self, db, completed_sale):
-        from django.utils import timezone
         from datetime import timedelta
+
+        from django.utils import timezone
 
         payment, _ = PaymentService.process_payment(
             sale_id=completed_sale.id,

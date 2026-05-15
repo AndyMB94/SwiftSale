@@ -1,8 +1,8 @@
 import uuid
 from decimal import Decimal
-from django.db import models
-from django.conf import settings
 
+from django.conf import settings
+from django.db import models
 
 IGV_RATE = Decimal('0.18')
 

@@ -1,10 +1,11 @@
 import threading
-import pytest
 from decimal import Decimal
+
+import pytest
 from ninja.errors import HttpError
 
 from apps.authentication.models import User
-from apps.products.models import Category, Product, Inventory
+from apps.products.models import Category, Inventory, Product
 from apps.products.services import InventoryService
 
 

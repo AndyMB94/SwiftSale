@@ -1,10 +1,12 @@
 import uuid
 from decimal import Decimal
+
 from django.db import transaction
 from ninja.errors import HttpError
 
 from apps.products.models import Inventory, InventoryMovement
-from .models import Sale, SaleItem, IGV_RATE
+
+from .models import IGV_RATE, Sale, SaleItem
 
 
 class SaleService:
@@ -118,8 +120,8 @@ class SaleService:
         sale.status = Sale.Status.CANCELLED
         sale.save(update_fields=['status', 'updated_at'])
 
-        from apps.audit.services import log_action
         from apps.audit.models import AuditLog
+        from apps.audit.services import log_action
         log_action(
             action=AuditLog.Action.SALE_CANCELLED,
             target_type='sale',
