@@ -22,7 +22,7 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 - [x] httpOnly cookie implementation in auth views
 - [x] Refresh token rotation + Redis blacklist in endpoints
 - [ ] Docker Compose with PostgreSQL, Redis, Nginx
-- [ ] User management endpoints (create, update, deactivate)
+- [x] User management endpoints (create, update, deactivate)
 - [x] Health check endpoints (DB, Redis)
 - [ ] GitHub Actions CI (lint, type check, tests)
 
