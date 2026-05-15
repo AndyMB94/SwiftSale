@@ -6,9 +6,10 @@ from ninja import Schema
 
 # ── Category ────────────────────────────────────────────────────────────────
 
+
 class CategoryCreateInput(Schema):
     name: str
-    description: str = ''
+    description: str = ""
 
 
 class CategoryUpdateInput(Schema):
@@ -32,10 +33,11 @@ class CategoryListOut(Schema):
 
 # ── Product ──────────────────────────────────────────────────────────────────
 
+
 class ProductCreateInput(Schema):
     category_id: uuid.UUID
     name: str
-    description: str = ''
+    description: str = ""
     sku: str
     barcode: str | None = None
     price: Decimal
@@ -85,6 +87,7 @@ class ProductListOut(Schema):
 
 
 # ── Inventory ────────────────────────────────────────────────────────────────
+
 
 class InventoryOut(Schema):
     product_id: uuid.UUID

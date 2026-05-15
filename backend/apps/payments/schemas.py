@@ -24,9 +24,9 @@ class PaymentOut(Schema):
 
 
 class WebhookPayload(Schema):
-    external_id: str       # our idempotency_key — links webhook to our payment
-    provider_ref: str      # provider's unique transaction ID
-    status: str            # 'paid' or 'failed'
+    external_id: str  # our idempotency_key — links webhook to our payment
+    provider_ref: str  # provider's unique transaction ID
+    status: str  # 'paid' or 'failed'
     amount: Decimal
 
 

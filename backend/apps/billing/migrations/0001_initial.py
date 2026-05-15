@@ -7,54 +7,124 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('sales', '0001_initial'),
+        ("sales", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BillingSeries',
+            name="BillingSeries",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('series', models.CharField(max_length=4, unique=True)),
-                ('document_type', models.CharField(choices=[('boleta', 'Boleta de Venta'), ('factura', 'Factura Electrónica')], max_length=10)),
-                ('last_correlativo', models.IntegerField(default=0)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("series", models.CharField(max_length=4, unique=True)),
+                (
+                    "document_type",
+                    models.CharField(
+                        choices=[
+                            ("boleta", "Boleta de Venta"),
+                            ("factura", "Factura Electrónica"),
+                        ],
+                        max_length=10,
+                    ),
+                ),
+                ("last_correlativo", models.IntegerField(default=0)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name_plural': 'billing series',
-                'db_table': 'billing_series',
+                "verbose_name_plural": "billing series",
+                "db_table": "billing_series",
             },
         ),
         migrations.CreateModel(
-            name='BillingDocument',
+            name="BillingDocument",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('correlativo', models.IntegerField()),
-                ('full_number', models.CharField(max_length=20, unique=True)),
-                ('document_type', models.CharField(choices=[('boleta', 'Boleta de Venta'), ('factura', 'Factura Electrónica')], max_length=10)),
-                ('customer_name', models.CharField(max_length=255)),
-                ('customer_document_type', models.CharField(max_length=10)),
-                ('customer_document_number', models.CharField(max_length=20)),
-                ('customer_address', models.TextField(blank=True)),
-                ('subtotal', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('tax', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('total', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('xml_content', models.TextField()),
-                ('sunat_cdr', models.TextField(blank=True)),
-                ('sunat_response_code', models.CharField(blank=True, max_length=10)),
-                ('status', models.CharField(choices=[('pending', 'Pending'), ('sent', 'Sent to OSE'), ('accepted', 'Accepted by SUNAT'), ('rejected', 'Rejected by SUNAT'), ('voided', 'Voided (Baja)')], default='pending', max_length=10)),
-                ('issued_at', models.DateTimeField(auto_now_add=True)),
-                ('voided_at', models.DateTimeField(blank=True, null=True)),
-                ('sale', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='billing_documents', to='sales.sale')),
-                ('series', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='documents', to='billing.billingseries')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("correlativo", models.IntegerField()),
+                ("full_number", models.CharField(max_length=20, unique=True)),
+                (
+                    "document_type",
+                    models.CharField(
+                        choices=[
+                            ("boleta", "Boleta de Venta"),
+                            ("factura", "Factura Electrónica"),
+                        ],
+                        max_length=10,
+                    ),
+                ),
+                ("customer_name", models.CharField(max_length=255)),
+                ("customer_document_type", models.CharField(max_length=10)),
+                ("customer_document_number", models.CharField(max_length=20)),
+                ("customer_address", models.TextField(blank=True)),
+                ("subtotal", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("tax", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("total", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("xml_content", models.TextField()),
+                ("sunat_cdr", models.TextField(blank=True)),
+                ("sunat_response_code", models.CharField(blank=True, max_length=10)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("sent", "Sent to OSE"),
+                            ("accepted", "Accepted by SUNAT"),
+                            ("rejected", "Rejected by SUNAT"),
+                            ("voided", "Voided (Baja)"),
+                        ],
+                        default="pending",
+                        max_length=10,
+                    ),
+                ),
+                ("issued_at", models.DateTimeField(auto_now_add=True)),
+                ("voided_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "sale",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="billing_documents",
+                        to="sales.sale",
+                    ),
+                ),
+                (
+                    "series",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="documents",
+                        to="billing.billingseries",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'billing_documents',
-                'indexes': [models.Index(fields=['full_number'], name='billing_doc_full_nu_4f5cc7_idx'), models.Index(fields=['sale'], name='billing_doc_sale_id_2224c3_idx'), models.Index(fields=['status'], name='billing_doc_status_dc081a_idx')],
+                "db_table": "billing_documents",
+                "indexes": [
+                    models.Index(
+                        fields=["full_number"], name="billing_doc_full_nu_4f5cc7_idx"
+                    ),
+                    models.Index(
+                        fields=["sale"], name="billing_doc_sale_id_2224c3_idx"
+                    ),
+                    models.Index(
+                        fields=["status"], name="billing_doc_status_dc081a_idx"
+                    ),
+                ],
             },
         ),
     ]

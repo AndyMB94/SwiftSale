@@ -13,9 +13,9 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'categories'
-        verbose_name_plural = 'categories'
-        ordering = ['name']
+        db_table = "categories"
+        verbose_name_plural = "categories"
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -24,7 +24,7 @@ class Category(models.Model):
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
-        Category, on_delete=models.PROTECT, related_name='products'
+        Category, on_delete=models.PROTECT, related_name="products"
     )
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -36,28 +36,28 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'products'
-        ordering = ['name']
+        db_table = "products"
+        ordering = ["name"]
 
     def __str__(self):
-        return f'{self.sku} — {self.name}'
+        return f"{self.sku} — {self.name}"
 
 
 class Inventory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.OneToOneField(
-        Product, on_delete=models.CASCADE, related_name='inventory'
+        Product, on_delete=models.CASCADE, related_name="inventory"
     )
     quantity = models.IntegerField(default=0)
     low_stock_threshold = models.IntegerField(default=10)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'inventory'
-        verbose_name_plural = 'inventories'
+        db_table = "inventory"
+        verbose_name_plural = "inventories"
 
     def __str__(self):
-        return f'{self.product.sku} — qty: {self.quantity}'
+        return f"{self.product.sku} — qty: {self.quantity}"
 
     @property
     def is_low_stock(self):
@@ -66,15 +66,15 @@ class Inventory(models.Model):
 
 class InventoryMovement(models.Model):
     class MovementType(models.TextChoices):
-        PURCHASE = 'purchase', 'Purchase'
-        SALE = 'sale', 'Sale'
-        ADJUSTMENT = 'adjustment', 'Manual Adjustment'
-        RETURN = 'return', 'Return'
-        LOSS = 'loss', 'Loss / Shrinkage'
+        PURCHASE = "purchase", "Purchase"
+        SALE = "sale", "Sale"
+        ADJUSTMENT = "adjustment", "Manual Adjustment"
+        RETURN = "return", "Return"
+        LOSS = "loss", "Loss / Shrinkage"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     inventory = models.ForeignKey(
-        Inventory, on_delete=models.CASCADE, related_name='movements'
+        Inventory, on_delete=models.CASCADE, related_name="movements"
     )
     movement_type = models.CharField(max_length=20, choices=MovementType.choices)
     quantity_delta = models.IntegerField()
@@ -84,10 +84,10 @@ class InventoryMovement(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='inventory_movements',
+        related_name="inventory_movements",
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'inventory_movements'
-        ordering = ['-created_at']
+        db_table = "inventory_movements"
+        ordering = ["-created_at"]

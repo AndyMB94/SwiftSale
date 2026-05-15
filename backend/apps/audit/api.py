@@ -9,16 +9,16 @@ from apps.authentication.security import CookieJWTAuth
 from .models import AuditLog
 from .schemas import AuditLogOut
 
-router = Router(tags=['audit'])
+router = Router(tags=["audit"])
 auth = CookieJWTAuth()
 
 
 def _require_admin(request):
     if request.auth.role != User.Role.ADMIN:
-        raise HttpError(403, 'Admin access required')
+        raise HttpError(403, "Admin access required")
 
 
-@router.get('', response=list[AuditLogOut], auth=auth)
+@router.get("", response=list[AuditLogOut], auth=auth)
 def list_audit_logs(
     request,
     action: str | None = None,
@@ -30,7 +30,7 @@ def list_audit_logs(
 ):
     _require_admin(request)
 
-    qs = AuditLog.objects.select_related('actor').order_by('-created_at')
+    qs = AuditLog.objects.select_related("actor").order_by("-created_at")
 
     if action:
         qs = qs.filter(action=action)

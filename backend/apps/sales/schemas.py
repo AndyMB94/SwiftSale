@@ -12,7 +12,7 @@ class SaleItemInput(Schema):
 
 class SaleCreateInput(Schema):
     items: list[SaleItemInput]
-    discount: Decimal = Decimal('0')
+    discount: Decimal = Decimal("0")
 
 
 class SaleItemOut(Schema):
@@ -58,7 +58,7 @@ class SaleOut(Schema):
                     unit_price=item.unit_price,
                     subtotal=item.subtotal,
                 )
-                for item in sale.items.select_related('product').all()
+                for item in sale.items.select_related("product").all()
             ],
             created_at=sale.created_at,
         )

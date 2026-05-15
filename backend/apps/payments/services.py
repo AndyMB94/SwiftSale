@@ -16,20 +16,20 @@ from .models import Payment
 
 logger = logging.getLogger(__name__)
 
-WEBHOOK_PROVIDERS = ('yape', 'plin', 'card')
+WEBHOOK_PROVIDERS = ("yape", "plin", "card")
 STALE_PAYMENT_MINUTES = 30
 
 
 def _enqueue_payment_notification(payment_id: str):
     try:
         from .tasks import notify_payment_result
+
         notify_payment_result.delay(payment_id)
     except Exception:
         pass
 
 
 class PaymentService:
-
     @staticmethod
     @transaction.atomic
     def process_payment(
@@ -53,18 +53,18 @@ class PaymentService:
         try:
             sale = Sale.objects.get(id=sale_id)
         except Sale.DoesNotExist:
-            raise HttpError(404, 'Sale not found')
+            raise HttpError(404, "Sale not found")
 
         if sale.status != Sale.Status.COMPLETED:
-            raise HttpError(422, 'Payment can only be processed for completed sales')
+            raise HttpError(422, "Payment can only be processed for completed sales")
 
         if Payment.objects.filter(sale=sale, status=Payment.Status.PAID).exists():
-            raise HttpError(409, 'Sale already has a paid payment')
+            raise HttpError(409, "Sale already has a paid payment")
 
         if amount != sale.total:
             raise HttpError(
                 422,
-                f'Amount mismatch: expected {sale.total}, received {amount}',
+                f"Amount mismatch: expected {sale.total}, received {amount}",
             )
 
         # Cash is confirmed immediately; others wait for webhook
@@ -81,19 +81,24 @@ class PaymentService:
             idempotency_key=idempotency_key,
         )
 
-        logger.info('payment_created', extra={
-            'payment_id': str(payment.id),
-            'sale_id': str(sale_id),
-            'method': method,
-            'status': status,
-            'user_id': str(created_by.id),
-        })
+        logger.info(
+            "payment_created",
+            extra={
+                "payment_id": str(payment.id),
+                "sale_id": str(sale_id),
+                "method": method,
+                "status": status,
+                "user_id": str(created_by.id),
+            },
+        )
 
         return payment, True
 
     @staticmethod
     @transaction.atomic
-    def handle_webhook(provider: str, external_id: str, provider_ref: str, status: str) -> Payment:
+    def handle_webhook(
+        provider: str, external_id: str, provider_ref: str, status: str
+    ) -> Payment:
         """
         Processes a payment confirmation webhook from a provider.
         Idempotent: duplicate provider_ref is silently ignored.
@@ -103,10 +108,13 @@ class PaymentService:
 
         # Duplicate webhook detection via provider_ref
         if Payment.objects.filter(provider_ref=provider_ref).exists():
-            logger.info('webhook_duplicate_ignored', extra={
-                'provider': provider,
-                'provider_ref': provider_ref,
-            })
+            logger.info(
+                "webhook_duplicate_ignored",
+                extra={
+                    "provider": provider,
+                    "provider_ref": provider_ref,
+                },
+            )
             return Payment.objects.get(provider_ref=provider_ref)
 
         try:
@@ -115,24 +123,27 @@ class PaymentService:
                 status=Payment.Status.PENDING,
             )
         except Payment.DoesNotExist:
-            raise HttpError(404, 'Pending payment not found for this external_id')
+            raise HttpError(404, "Pending payment not found for this external_id")
 
-        if status == 'paid':
+        if status == "paid":
             payment.status = Payment.Status.PAID
-        elif status == 'failed':
+        elif status == "failed":
             payment.status = Payment.Status.FAILED
         else:
             raise HttpError(400, f"Invalid status '{status}'")
 
         payment.provider_ref = provider_ref
-        payment.save(update_fields=['status', 'provider_ref', 'updated_at'])
+        payment.save(update_fields=["status", "provider_ref", "updated_at"])
 
-        logger.info('webhook_processed', extra={
-            'provider': provider,
-            'provider_ref': provider_ref,
-            'payment_id': str(payment.id),
-            'new_status': payment.status,
-        })
+        logger.info(
+            "webhook_processed",
+            extra={
+                "provider": provider,
+                "provider_ref": provider_ref,
+                "payment_id": str(payment.id),
+                "new_status": payment.status,
+            },
+        )
 
         payment_id = str(payment.id)
         transaction.on_commit(lambda: _enqueue_payment_notification(payment_id))
@@ -145,19 +156,19 @@ class PaymentService:
         Validates HMAC-SHA256 signature from webhook provider.
         Expected header format: 'sha256=<hex_digest>'
         """
-        secret = getattr(settings, 'WEBHOOK_SECRET_KEY', '')
+        secret = getattr(settings, "WEBHOOK_SECRET_KEY", "")
         if not secret:
             return False
-        mac = hmac.new(secret.encode('utf-8'), payload, hashlib.sha256)
-        expected = 'sha256=' + mac.hexdigest()
+        mac = hmac.new(secret.encode("utf-8"), payload, hashlib.sha256)
+        expected = "sha256=" + mac.hexdigest()
         return hmac.compare_digest(expected, signature_header)
 
     @staticmethod
     def get_payment(payment_id: uuid.UUID) -> Payment:
         try:
-            return Payment.objects.select_related('sale').get(id=payment_id)
+            return Payment.objects.select_related("sale").get(id=payment_id)
         except Payment.DoesNotExist:
-            raise HttpError(404, 'Payment not found')
+            raise HttpError(404, "Payment not found")
 
     @staticmethod
     def reconcile_stale_payments() -> int:
@@ -174,6 +185,6 @@ class PaymentService:
         stale.update(status=Payment.Status.FAILED)
 
         if count:
-            logger.info('payments_reconciled', extra={'marked_as_failed': count})
+            logger.info("payments_reconciled", extra={"marked_as_failed": count})
 
         return count

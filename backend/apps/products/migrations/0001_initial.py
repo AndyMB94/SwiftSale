@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,73 +16,148 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('description', models.TextField(blank=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("description", models.TextField(blank=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name_plural': 'categories',
-                'db_table': 'categories',
-                'ordering': ['name'],
+                "verbose_name_plural": "categories",
+                "db_table": "categories",
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='Inventory',
+            name="Inventory",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('quantity', models.IntegerField(default=0)),
-                ('low_stock_threshold', models.IntegerField(default=10)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("quantity", models.IntegerField(default=0)),
+                ("low_stock_threshold", models.IntegerField(default=10)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name_plural': 'inventories',
-                'db_table': 'inventory',
+                "verbose_name_plural": "inventories",
+                "db_table": "inventory",
             },
         ),
         migrations.CreateModel(
-            name='InventoryMovement',
+            name="InventoryMovement",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('movement_type', models.CharField(choices=[('purchase', 'Purchase'), ('sale', 'Sale'), ('adjustment', 'Manual Adjustment'), ('return', 'Return'), ('loss', 'Loss / Shrinkage')], max_length=20)),
-                ('quantity_delta', models.IntegerField()),
-                ('quantity_after', models.IntegerField()),
-                ('reason', models.CharField(blank=True, max_length=255)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='inventory_movements', to=settings.AUTH_USER_MODEL)),
-                ('inventory', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='movements', to='products.inventory')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "movement_type",
+                    models.CharField(
+                        choices=[
+                            ("purchase", "Purchase"),
+                            ("sale", "Sale"),
+                            ("adjustment", "Manual Adjustment"),
+                            ("return", "Return"),
+                            ("loss", "Loss / Shrinkage"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("quantity_delta", models.IntegerField()),
+                ("quantity_after", models.IntegerField()),
+                ("reason", models.CharField(blank=True, max_length=255)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "created_by",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="inventory_movements",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "inventory",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="movements",
+                        to="products.inventory",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'inventory_movements',
-                'ordering': ['-created_at'],
+                "db_table": "inventory_movements",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=255)),
-                ('description', models.TextField(blank=True)),
-                ('sku', models.CharField(max_length=100, unique=True)),
-                ('barcode', models.CharField(blank=True, max_length=100, null=True, unique=True)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='products', to='products.category')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("description", models.TextField(blank=True)),
+                ("sku", models.CharField(max_length=100, unique=True)),
+                (
+                    "barcode",
+                    models.CharField(
+                        blank=True, max_length=100, null=True, unique=True
+                    ),
+                ),
+                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("is_active", models.BooleanField(default=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="products",
+                        to="products.category",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'products',
-                'ordering': ['name'],
+                "db_table": "products",
+                "ordering": ["name"],
             },
         ),
         migrations.AddField(
-            model_name='inventory',
-            name='product',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='inventory', to='products.product'),
+            model_name="inventory",
+            name="product",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="inventory",
+                to="products.product",
+            ),
         ),
     ]

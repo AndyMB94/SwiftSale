@@ -7,31 +7,79 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('sales', '0001_initial'),
+        ("sales", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Payment',
+            name="Payment",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('method', models.CharField(choices=[('cash', 'Cash'), ('card', 'Card'), ('yape', 'Yape'), ('plin', 'Plin')], max_length=10)),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('status', models.CharField(choices=[('pending', 'Pending'), ('paid', 'Paid'), ('failed', 'Failed'), ('refunded', 'Refunded')], default='pending', max_length=10)),
-                ('provider_ref', models.CharField(blank=True, max_length=255, null=True, unique=True)),
-                ('idempotency_key', models.CharField(max_length=255, unique=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('sale', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='payments', to='sales.sale')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "method",
+                    models.CharField(
+                        choices=[
+                            ("cash", "Cash"),
+                            ("card", "Card"),
+                            ("yape", "Yape"),
+                            ("plin", "Plin"),
+                        ],
+                        max_length=10,
+                    ),
+                ),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("paid", "Paid"),
+                            ("failed", "Failed"),
+                            ("refunded", "Refunded"),
+                        ],
+                        default="pending",
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "provider_ref",
+                    models.CharField(
+                        blank=True, max_length=255, null=True, unique=True
+                    ),
+                ),
+                ("idempotency_key", models.CharField(max_length=255, unique=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "sale",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="payments",
+                        to="sales.sale",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'payments',
-                'ordering': ['-created_at'],
-                'indexes': [models.Index(fields=['sale'], name='payments_sale_id_81d85c_idx'), models.Index(fields=['status'], name='payments_status_d621e5_idx'), models.Index(fields=['provider_ref'], name='payments_provide_788e74_idx')],
+                "db_table": "payments",
+                "ordering": ["-created_at"],
+                "indexes": [
+                    models.Index(fields=["sale"], name="payments_sale_id_81d85c_idx"),
+                    models.Index(fields=["status"], name="payments_status_d621e5_idx"),
+                    models.Index(
+                        fields=["provider_ref"], name="payments_provide_788e74_idx"
+                    ),
+                ],
             },
         ),
     ]

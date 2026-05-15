@@ -9,13 +9,13 @@ from pydantic import EmailStr
 class UserCreateInput(Schema):
     email: EmailStr
     full_name: str
-    role: Literal['admin', 'supervisor', 'cashier']
+    role: Literal["admin", "supervisor", "cashier"]
     password: str
 
 
 class UserUpdateInput(Schema):
     full_name: str | None = None
-    role: Literal['admin', 'supervisor', 'cashier'] | None = None
+    role: Literal["admin", "supervisor", "cashier"] | None = None
     is_active: bool | None = None
 
 

@@ -18,13 +18,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             return
 
         self.user = user
-        self.group_name = f'user_{user.id}'
+        self.group_name = f"user_{user.id}"
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
-        if hasattr(self, 'group_name'):
+        if hasattr(self, "group_name"):
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def receive(self, text_data=None, bytes_data=None):
@@ -33,7 +33,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def notification_message(self, event):
         """Handler for group messages sent by Celery tasks."""
-        await self.send(text_data=json.dumps(event['payload']))
+        await self.send(text_data=json.dumps(event["payload"]))
 
     # ── Private ──────────────────────────────────────────────────────────────
 
@@ -50,7 +50,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
         try:
             token = AccessToken(token_str)
-            user_id = token['user_id']
+            user_id = token["user_id"]
         except (TokenError, KeyError):
             return None
 
@@ -64,11 +64,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         return await get_user()
 
     def _parse_cookies(self) -> dict:
-        headers = dict(self.scope.get('headers', []))
-        raw = headers.get(b'cookie', b'').decode('utf-8', errors='ignore')
+        headers = dict(self.scope.get("headers", []))
+        raw = headers.get(b"cookie", b"").decode("utf-8", errors="ignore")
         cookies = {}
-        for part in raw.split(';'):
-            if '=' in part:
-                key, _, value = part.strip().partition('=')
+        for part in raw.split(";"):
+            if "=" in part:
+                key, _, value = part.strip().partition("=")
                 cookies[key.strip()] = value.strip()
         return cookies

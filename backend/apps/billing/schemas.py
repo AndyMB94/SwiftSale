@@ -17,7 +17,7 @@ class IssueBoletaIn(Schema):
     sale_id: UUID
     series: str
     customer_name: str
-    customer_document_type: Literal['DNI', 'CE', 'PASAPORTE']
+    customer_document_type: Literal["DNI", "CE", "PASAPORTE"]
     customer_document_number: str
     items: list[BillingItemIn]
 

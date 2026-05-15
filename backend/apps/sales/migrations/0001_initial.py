@@ -9,53 +9,122 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('products', '0001_initial'),
+        ("products", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Sale',
+            name="Sale",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('status', models.CharField(choices=[('pending', 'Pending'), ('completed', 'Completed'), ('cancelled', 'Cancelled')], default='pending', max_length=20)),
-                ('subtotal', models.DecimalField(decimal_places=2, default=Decimal('0'), max_digits=10)),
-                ('discount', models.DecimalField(decimal_places=2, default=Decimal('0'), max_digits=10)),
-                ('tax', models.DecimalField(decimal_places=2, default=Decimal('0'), max_digits=10)),
-                ('total', models.DecimalField(decimal_places=2, default=Decimal('0'), max_digits=10)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('cashier', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='sales', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("completed", "Completed"),
+                            ("cancelled", "Cancelled"),
+                        ],
+                        default="pending",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "subtotal",
+                    models.DecimalField(
+                        decimal_places=2, default=Decimal("0"), max_digits=10
+                    ),
+                ),
+                (
+                    "discount",
+                    models.DecimalField(
+                        decimal_places=2, default=Decimal("0"), max_digits=10
+                    ),
+                ),
+                (
+                    "tax",
+                    models.DecimalField(
+                        decimal_places=2, default=Decimal("0"), max_digits=10
+                    ),
+                ),
+                (
+                    "total",
+                    models.DecimalField(
+                        decimal_places=2, default=Decimal("0"), max_digits=10
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "cashier",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="sales",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'sales',
-                'ordering': ['-created_at'],
+                "db_table": "sales",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='SaleItem',
+            name="SaleItem",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('quantity', models.PositiveIntegerField()),
-                ('unit_price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('subtotal', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='sale_items', to='products.product')),
-                ('sale', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='sales.sale')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("quantity", models.PositiveIntegerField()),
+                ("unit_price", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("subtotal", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="sale_items",
+                        to="products.product",
+                    ),
+                ),
+                (
+                    "sale",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="items",
+                        to="sales.sale",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'sale_items',
+                "db_table": "sale_items",
             },
         ),
         migrations.AddIndex(
-            model_name='sale',
-            index=models.Index(fields=['cashier', 'created_at'], name='sales_cashier_d2bce2_idx'),
+            model_name="sale",
+            index=models.Index(
+                fields=["cashier", "created_at"], name="sales_cashier_d2bce2_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='sale',
-            index=models.Index(fields=['status'], name='sales_status_a83c6f_idx'),
+            model_name="sale",
+            index=models.Index(fields=["status"], name="sales_status_a83c6f_idx"),
         ),
     ]

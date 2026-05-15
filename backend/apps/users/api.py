@@ -9,17 +9,17 @@ from core.permissions import require_admin, require_admin_or_supervisor
 from .schemas import UserCreateInput, UserListOut, UserOut, UserUpdateInput
 from .services import UserService
 
-router = Router(tags=['Users'])
+router = Router(tags=["Users"])
 
 
-@router.get('/', response=UserListOut, auth=cookie_auth)
+@router.get("/", response=UserListOut, auth=cookie_auth)
 def list_users(request):
     require_admin_or_supervisor(request)
     users = UserService.list_users()
-    return {'count': len(users), 'results': users}
+    return {"count": len(users), "results": users}
 
 
-@router.post('/', response={201: UserOut}, auth=cookie_auth)
+@router.post("/", response={201: UserOut}, auth=cookie_auth)
 def create_user(request, payload: UserCreateInput):
     require_admin(request)
     try:
@@ -34,7 +34,7 @@ def create_user(request, payload: UserCreateInput):
     return 201, user
 
 
-@router.get('/{user_id}', response=UserOut, auth=cookie_auth)
+@router.get("/{user_id}", response=UserOut, auth=cookie_auth)
 def get_user(request, user_id: uuid.UUID):
     require_admin_or_supervisor(request)
     try:
@@ -44,7 +44,7 @@ def get_user(request, user_id: uuid.UUID):
     return user
 
 
-@router.put('/{user_id}', response=UserOut, auth=cookie_auth)
+@router.put("/{user_id}", response=UserOut, auth=cookie_auth)
 def update_user(request, user_id: uuid.UUID, payload: UserUpdateInput):
     require_admin(request)
     try:

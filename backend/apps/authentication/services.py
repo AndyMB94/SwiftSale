@@ -12,15 +12,16 @@ class AuthService:
         if user is None:
             from apps.audit.models import AuditLog
             from apps.audit.services import log_action
+
             log_action(
                 action=AuditLog.Action.LOGIN_FAILED,
-                target_type='user',
+                target_type="user",
                 target_id=email,
-                metadata={'email': email},
+                metadata={"email": email},
             )
-            raise ValueError('Invalid credentials')
+            raise ValueError("Invalid credentials")
         if not user.is_active:
-            raise ValueError('Account is disabled')
+            raise ValueError("Account is disabled")
         refresh = RefreshToken.for_user(user)
         return user, str(refresh.access_token), str(refresh)
 
@@ -29,7 +30,7 @@ class AuthService:
         try:
             old_token = RefreshToken(refresh_token)
             old_token.blacklist()
-            user = User.objects.get(id=old_token['user_id'])
+            user = User.objects.get(id=old_token["user_id"])
             new_refresh = RefreshToken.for_user(user)
             return str(new_refresh.access_token), str(new_refresh)
         except TokenError as e:

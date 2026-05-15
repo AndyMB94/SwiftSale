@@ -9,7 +9,7 @@ from .models import BillingDocument
 from .schemas import BillingDocumentOut, IssueBoletaIn, IssueFacturaIn, VoidDocumentIn
 from .services import BillingService
 
-router = Router(tags=['billing'])
+router = Router(tags=["billing"])
 auth = CookieJWTAuth()
 
 
@@ -31,45 +31,45 @@ def _doc_to_out(doc: BillingDocument) -> BillingDocumentOut:
     )
 
 
-@router.post('/boleta', response=BillingDocumentOut, auth=auth)
+@router.post("/boleta", response=BillingDocumentOut, auth=auth)
 def issue_boleta(request, payload: IssueBoletaIn):
     items = [
         {
-            'description': it.description,
-            'quantity': it.quantity,
-            'unit_price': it.unit_price,
+            "description": it.description,
+            "quantity": it.quantity,
+            "unit_price": it.unit_price,
         }
         for it in payload.items
     ]
     doc = BillingService.issue_document(
         sale_id=payload.sale_id,
         series_code=payload.series,
-        document_type='boleta',
+        document_type="boleta",
         customer_name=payload.customer_name,
         customer_document_type=payload.customer_document_type,
         customer_document_number=payload.customer_document_number,
-        customer_address='',
+        customer_address="",
         items=items,
     )
     return _doc_to_out(doc)
 
 
-@router.post('/factura', response=BillingDocumentOut, auth=auth)
+@router.post("/factura", response=BillingDocumentOut, auth=auth)
 def issue_factura(request, payload: IssueFacturaIn):
     items = [
         {
-            'description': it.description,
-            'quantity': it.quantity,
-            'unit_price': it.unit_price,
+            "description": it.description,
+            "quantity": it.quantity,
+            "unit_price": it.unit_price,
         }
         for it in payload.items
     ]
     doc = BillingService.issue_document(
         sale_id=payload.sale_id,
         series_code=payload.series,
-        document_type='factura',
+        document_type="factura",
         customer_name=payload.customer_name,
-        customer_document_type='RUC',
+        customer_document_type="RUC",
         customer_document_number=payload.customer_document_number,
         customer_address=payload.customer_address,
         items=items,
@@ -77,22 +77,22 @@ def issue_factura(request, payload: IssueFacturaIn):
     return _doc_to_out(doc)
 
 
-@router.get('', response=list[BillingDocumentOut], auth=auth)
+@router.get("", response=list[BillingDocumentOut], auth=auth)
 def list_documents(request):
-    docs = BillingDocument.objects.select_related('series').order_by('-issued_at')
+    docs = BillingDocument.objects.select_related("series").order_by("-issued_at")
     return [_doc_to_out(d) for d in docs]
 
 
-@router.get('/{document_id}', response=BillingDocumentOut, auth=auth)
+@router.get("/{document_id}", response=BillingDocumentOut, auth=auth)
 def get_document(request, document_id: UUID):
     try:
         doc = BillingDocument.objects.get(id=document_id)
     except BillingDocument.DoesNotExist:
-        raise HttpError(404, 'Billing document not found')
+        raise HttpError(404, "Billing document not found")
     return _doc_to_out(doc)
 
 
-@router.post('/{document_id}/void', response=BillingDocumentOut, auth=auth)
+@router.post("/{document_id}/void", response=BillingDocumentOut, auth=auth)
 def void_document(request, document_id: UUID, payload: VoidDocumentIn):
     doc = BillingService.void_document(document_id=document_id, reason=payload.reason)
     return _doc_to_out(doc)

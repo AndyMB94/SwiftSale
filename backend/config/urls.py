@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import include, path
 from ninja import NinjaAPI
@@ -29,23 +30,23 @@ from apps.users.api import router as users_router
 from core.health import router as health_router
 
 api = NinjaAPI(
-    title='SwiftSale API',
-    version='1.0.0',
-    description='Modern Retail Management Platform',
+    title="SwiftSale API",
+    version="1.0.0",
+    description="Modern Retail Management Platform",
 )
 
-api.add_router('/auth', auth_router)
-api.add_router('/users', users_router)
-api.add_router('/products', products_router)
-api.add_router('/sales', sales_router)
-api.add_router('/payments', payments_router)
-api.add_router('/billing', billing_router)
-api.add_router('/reports', reports_router)
-api.add_router('/audit', audit_router)
-api.add_router('/health', health_router)
+api.add_router("/auth", auth_router)
+api.add_router("/users", users_router)
+api.add_router("/products", products_router)
+api.add_router("/sales", sales_router)
+api.add_router("/payments", payments_router)
+api.add_router("/billing", billing_router)
+api.add_router("/reports", reports_router)
+api.add_router("/audit", audit_router)
+api.add_router("/health", health_router)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/', api.urls),
-    path('', include('django_prometheus.urls')),  # exposes GET /metrics
+    path("admin/", admin.site.urls),
+    path("api/v1/", api.urls),
+    path("", include("django_prometheus.urls")),  # exposes GET /metrics
 ]

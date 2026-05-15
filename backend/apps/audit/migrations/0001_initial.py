@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,21 +16,61 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='AuditLog',
+            name="AuditLog",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('action', models.CharField(choices=[('price_change', 'Price Change'), ('stock_edit', 'Stock Edit'), ('sale_cancelled', 'Sale Cancelled'), ('login_failed', 'Login Failed'), ('user_deactivated', 'User Deactivated'), ('document_voided', 'Document Voided')], db_index=True, max_length=50)),
-                ('target_type', models.CharField(max_length=50)),
-                ('target_id', models.CharField(max_length=50)),
-                ('metadata', models.JSONField(default=dict)),
-                ('ip_address', models.GenericIPAddressField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('actor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='audit_logs', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "action",
+                    models.CharField(
+                        choices=[
+                            ("price_change", "Price Change"),
+                            ("stock_edit", "Stock Edit"),
+                            ("sale_cancelled", "Sale Cancelled"),
+                            ("login_failed", "Login Failed"),
+                            ("user_deactivated", "User Deactivated"),
+                            ("document_voided", "Document Voided"),
+                        ],
+                        db_index=True,
+                        max_length=50,
+                    ),
+                ),
+                ("target_type", models.CharField(max_length=50)),
+                ("target_id", models.CharField(max_length=50)),
+                ("metadata", models.JSONField(default=dict)),
+                ("ip_address", models.GenericIPAddressField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "actor",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="audit_logs",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'audit_logs',
-                'ordering': ['-created_at'],
-                'indexes': [models.Index(fields=['actor', 'created_at'], name='audit_logs_actor_i_5bd818_idx'), models.Index(fields=['target_type', 'target_id'], name='audit_logs_target__9fc8de_idx')],
+                "db_table": "audit_logs",
+                "ordering": ["-created_at"],
+                "indexes": [
+                    models.Index(
+                        fields=["actor", "created_at"],
+                        name="audit_logs_actor_i_5bd818_idx",
+                    ),
+                    models.Index(
+                        fields=["target_type", "target_id"],
+                        name="audit_logs_target__9fc8de_idx",
+                    ),
+                ],
             },
         ),
     ]

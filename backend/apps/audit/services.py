@@ -23,7 +23,10 @@ def log_action(
         )
     except Exception:
         import logging
+
         logging.getLogger(__name__).exception(
-            'Failed to write audit log: action=%s target=%s/%s',
-            action, target_type, target_id,
+            "Failed to write audit log: action=%s target=%s/%s",
+            action,
+            target_type,
+            target_id,
         )
