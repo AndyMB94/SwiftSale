@@ -69,16 +69,16 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 ## Phase 4 — Payments
 **Goal:** Reliable payment processing with idempotency and webhook safety.
 
-- [ ] Payment model with idempotency key
-- [ ] Cash payment flow
-- [ ] Card payment flow
-- [ ] Yape / Plin payment flow
-- [ ] Payment status transitions
-- [ ] Webhook receiver with signature validation
-- [ ] Duplicate webhook detection via `provider_ref`
-- [ ] Payment reconciliation
-- [ ] Integration tests for payment flows
-- [ ] Tests for duplicate webhook handling
+- [x] Payment model with idempotency key
+- [x] Cash payment flow
+- [x] Card payment flow
+- [x] Yape / Plin payment flow
+- [x] Payment status transitions
+- [x] Webhook receiver with signature validation
+- [x] Duplicate webhook detection via `provider_ref`
+- [x] Payment reconciliation
+- [x] Integration tests for payment flows
+- [x] Tests for duplicate webhook handling
 
 **Deliverable:** Payments processed safely with no duplicate orders or inventory side effects.
 
