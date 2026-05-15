@@ -10,16 +10,20 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 ## Phase 1 — Foundation
 **Goal:** Runnable project with authentication and infrastructure.
 
-- [ ] Project structure setup (backend + frontend + docs)
+- [x] Project structure setup (backend + frontend + docs)
+- [x] Django project with modular app structure (base / dev / prod settings)
+- [x] ASGI server configured with Daphne + Django Channels
+- [x] Custom User model with role-based access (Admin, Supervisor, Cashier)
+- [x] JWT + token blacklist configured (djangorestframework-simplejwt)
+- [x] Structured JSON logging
+- [x] pytest + ruff + mypy configured (pyproject.toml)
+- [x] Initial migrations applied (User model + token blacklist)
 - [ ] Docker Compose with PostgreSQL, Redis, Nginx
-- [ ] Django project with modular app structure
-- [ ] JWT authentication with httpOnly cookies
-- [ ] Refresh token flow + Redis token blacklist
-- [ ] Role-based permissions (Admin, Supervisor, Cashier)
-- [ ] User management (create, update, deactivate)
+- [ ] JWT authentication endpoints (login, refresh, logout, me)
+- [ ] httpOnly cookie implementation in auth views
+- [ ] Refresh token rotation + Redis blacklist in endpoints
+- [ ] User management endpoints (create, update, deactivate)
 - [ ] Health check endpoints (DB, Redis, workers)
-- [ ] Structured JSON logging
-- [ ] pytest setup with base fixtures
 - [ ] GitHub Actions CI (lint, type check, tests)
 
 **Deliverable:** A secured, deployable API skeleton with working auth.
