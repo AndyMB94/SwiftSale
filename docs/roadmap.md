@@ -126,15 +126,15 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 
 ---
 
-## Phase 7 — Reports & Audit
+## Phase 7 — Reports & Audit ✅
 **Goal:** Business intelligence and full traceability.
 
-- [ ] Daily revenue report
-- [ ] Best-selling products report
-- [ ] Inventory valuation report
-- [ ] Date range filtering for all reports
-- [ ] Audit log for sensitive actions (price changes, stock edits, cancellations, failed logins)
-- [ ] Admin-only audit log viewer endpoint
+- [x] Daily revenue report with avg ticket per day
+- [x] Best-selling products report sorted by quantity sold
+- [x] Inventory valuation report (quantity × unit price per product)
+- [x] Date range filtering for all reports (defaults to current month)
+- [x] Audit log for sensitive actions: price changes, stock edits, sale cancellations, failed logins, user deactivations, document voiding
+- [x] Admin-only audit log viewer endpoint with filters (action, actor, target, date range)
 
 **Deliverable:** Managers can track revenue trends and audit any sensitive system action.
 
