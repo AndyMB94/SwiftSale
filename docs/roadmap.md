@@ -24,7 +24,7 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 - [x] Docker Compose with PostgreSQL, Redis, Nginx
 - [x] User management endpoints (create, update, deactivate)
 - [x] Health check endpoints (DB, Redis)
-- [ ] GitHub Actions CI (lint, type check, tests)
+- [x] GitHub Actions CI (lint, type check, tests)
 
 **Deliverable:** A secured, deployable API skeleton with working auth.
 
