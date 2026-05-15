@@ -22,6 +22,9 @@ def _clear_auth_cookies(response: HttpResponse) -> None:
 
 @router.post('/login', response=LoginOut, auth=None)
 def login(request, response: HttpResponse, payload: LoginInput):
+    from core.ratelimit import check_rate_limit
+    check_rate_limit(request, key_prefix='login', rate='10/m')
+
     try:
         user, access, refresh = AuthService.login(payload.email, payload.password)
     except ValueError as e:
