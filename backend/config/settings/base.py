@@ -32,6 +32,7 @@ LOCAL_APPS = [
     'apps.sales',
     'apps.payments',
     'apps.billing',
+    'apps.notifications',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -142,6 +143,30 @@ COMPANY_ADDRESS = config('COMPANY_ADDRESS', default='Av. Ejemplo 123, Lima, Peru
 OSE_PROVIDER = config('OSE_PROVIDER', default='mock')  # 'mock' | 'nubefact'
 NUBEFACT_TOKEN = config('NUBEFACT_TOKEN', default='')
 NUBEFACT_HOMOLOGATION = config('NUBEFACT_HOMOLOGATION', default=True, cast=bool)
+
+# Email
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@swiftsale.pe')
+EMAIL_BACKEND = config(
+    'EMAIL_BACKEND',
+    default='django.core.mail.backends.console.EmailBackend',
+)
+ANYMAIL = {
+    'SENDGRID_API_KEY': config('SENDGRID_API_KEY', default=''),
+    'MAILGUN_API_KEY': config('MAILGUN_API_KEY', default=''),
+    'MAILGUN_SENDER_DOMAIN': config('MAILGUN_SENDER_DOMAIN', default=''),
+}
+LOW_STOCK_ALERT_EMAIL = config('LOW_STOCK_ALERT_EMAIL', default='')
+
+# Celery queues
+CELERY_TASK_QUEUES_FROM_ROUTING = True
+CELERY_TASK_ROUTES = {
+    'apps.billing.tasks.*': {'queue': 'receipts'},
+    'apps.payments.tasks.*': {'queue': 'notifications'},
+    'apps.products.tasks.*': {'queue': 'notifications'},
+}
+CELERY_TASK_DEFAULT_QUEUE = 'default'
+CELERY_TASK_ACKS_LATE = True
+CELERY_TASK_REJECT_ON_WORKER_LOST = True
 
 CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/1')
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://localhost:6379/2')
