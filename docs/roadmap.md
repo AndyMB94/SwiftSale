@@ -18,10 +18,10 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 - [x] Structured JSON logging
 - [x] pytest + ruff + mypy configured (pyproject.toml)
 - [x] Initial migrations applied (User model + token blacklist)
+- [x] JWT authentication endpoints (login, refresh, logout, me)
+- [x] httpOnly cookie implementation in auth views
+- [x] Refresh token rotation + Redis blacklist in endpoints
 - [ ] Docker Compose with PostgreSQL, Redis, Nginx
-- [ ] JWT authentication endpoints (login, refresh, logout, me)
-- [ ] httpOnly cookie implementation in auth views
-- [ ] Refresh token rotation + Redis blacklist in endpoints
 - [ ] User management endpoints (create, update, deactivate)
 - [ ] Health check endpoints (DB, Redis, workers)
 - [ ] GitHub Actions CI (lint, type check, tests)
