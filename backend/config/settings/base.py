@@ -30,6 +30,7 @@ LOCAL_APPS = [
     'apps.users',
     'apps.products',
     'apps.sales',
+    'apps.payments',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -130,6 +131,8 @@ SIMPLE_JWT = {
     'SIGNING_KEY': config('JWT_SECRET_KEY', default=SECRET_KEY),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+WEBHOOK_SECRET_KEY = config('WEBHOOK_SECRET_KEY', default='dev-webhook-secret')
 
 CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/1')
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://localhost:6379/2')
