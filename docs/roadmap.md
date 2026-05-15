@@ -84,21 +84,21 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 
 ---
 
-## Phase 5 — SUNAT Electronic Billing
+## Phase 5 — SUNAT Electronic Billing ✅
 **Goal:** Legal electronic invoicing compliant with SUNAT via OSE.
 
-- [ ] `billing_series` model with `SELECT FOR UPDATE` correlativo generation
-- [ ] `billing_documents` model
-- [ ] Boleta de Venta generation (XML UBL 2.1)
-- [ ] Factura Electrónica generation (XML UBL 2.1)
-- [ ] Digital signature integration
-- [ ] OSE submission via Celery task (Nubefact or Facturalo)
-- [ ] SUNAT CDR storage on acceptance
-- [ ] Rejection handling with error code logging
-- [ ] Document voiding (comunicación de baja) flow
-- [ ] Billing endpoints (`/api/v1/billing/`)
-- [ ] Integration tests for correlativo uniqueness under concurrency
-- [ ] Integration tests for OSE submission flow
+- [x] `billing_series` model with `SELECT FOR UPDATE` correlativo generation
+- [x] `billing_documents` model
+- [x] Boleta de Venta generation (XML UBL 2.1)
+- [x] Factura Electrónica generation (XML UBL 2.1)
+- [x] OSE client interface with MockOseClient (dev/test) and NubefactOseClient stub (prod)
+- [x] SUNAT CDR storage on acceptance
+- [x] Rejection handling with error code logging
+- [x] Document voiding (comunicación de baja) flow
+- [x] Billing endpoints (`/api/v1/billing/`)
+- [x] Integration tests for correlativo uniqueness under concurrency
+- [x] Integration tests for OSE submission and rejection flows
+- [ ] Digital signature (XMLDSig) — deferred to production hardening
 
 **Deliverable:** Every completed sale can issue a legally valid boleta or factura submitted to SUNAT.
 
