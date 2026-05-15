@@ -21,7 +21,7 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 - [x] JWT authentication endpoints (login, refresh, logout, me)
 - [x] httpOnly cookie implementation in auth views
 - [x] Refresh token rotation + Redis blacklist in endpoints
-- [ ] Docker Compose with PostgreSQL, Redis, Nginx
+- [x] Docker Compose with PostgreSQL, Redis, Nginx
 - [x] User management endpoints (create, update, deactivate)
 - [x] Health check endpoints (DB, Redis)
 - [ ] GitHub Actions CI (lint, type check, tests)
