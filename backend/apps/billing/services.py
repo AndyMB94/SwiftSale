@@ -165,4 +165,14 @@ class BillingService:
         doc.status = BillingDocument.Status.VOIDED
         doc.voided_at = timezone.now()
         doc.save(update_fields=['status', 'voided_at'])
+
+        from apps.audit.services import log_action
+        from apps.audit.models import AuditLog
+        log_action(
+            action=AuditLog.Action.DOCUMENT_VOIDED,
+            target_type='billing_document',
+            target_id=str(document_id),
+            metadata={'full_number': doc.full_number, 'reason': reason, 'total': str(doc.total)},
+        )
+
         return doc

@@ -10,6 +10,14 @@ class AuthService:
     def login(email: str, password: str) -> tuple[User, str, str]:
         user = authenticate(username=email, password=password)
         if user is None:
+            from apps.audit.services import log_action
+            from apps.audit.models import AuditLog
+            log_action(
+                action=AuditLog.Action.LOGIN_FAILED,
+                target_type='user',
+                target_id=email,
+                metadata={'email': email},
+            )
             raise ValueError('Invalid credentials')
         if not user.is_active:
             raise ValueError('Account is disabled')

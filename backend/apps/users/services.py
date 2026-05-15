@@ -41,8 +41,20 @@ class UserService:
             user.full_name = full_name
         if role is not None:
             user.role = role
+        was_active = user.is_active
         if is_active is not None:
             user.is_active = is_active
 
         user.save()
+
+        if is_active is False and was_active:
+            from apps.audit.services import log_action
+            from apps.audit.models import AuditLog
+            log_action(
+                action=AuditLog.Action.USER_DEACTIVATED,
+                target_type='user',
+                target_id=str(user.id),
+                metadata={'email': user.email, 'role': user.role},
+            )
+
         return user

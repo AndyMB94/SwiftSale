@@ -122,10 +122,22 @@ class ProductService:
             except Category.DoesNotExist:
                 raise HttpError(404, 'Category not found')
 
+        old_price = product.price
         for field, value in kwargs.items():
             if value is not None:
                 setattr(product, field, value)
         product.save()
+
+        if 'price' in kwargs and kwargs['price'] is not None and kwargs['price'] != old_price:
+            from apps.audit.services import log_action
+            from apps.audit.models import AuditLog
+            log_action(
+                action=AuditLog.Action.PRICE_CHANGE,
+                target_type='product',
+                target_id=str(product_id),
+                metadata={'old_price': str(old_price), 'new_price': str(product.price), 'sku': product.sku},
+            )
+
         return product
 
     @staticmethod
@@ -175,6 +187,21 @@ class InventoryService:
             quantity_after=new_quantity,
             reason=reason,
             created_by=created_by,
+        )
+
+        from apps.audit.services import log_action
+        from apps.audit.models import AuditLog
+        log_action(
+            action=AuditLog.Action.STOCK_EDIT,
+            target_type='inventory',
+            target_id=str(product_id),
+            actor=created_by,
+            metadata={
+                'quantity_delta': quantity_delta,
+                'quantity_after': new_quantity,
+                'reason': reason,
+                'movement_type': movement_type,
+            },
         )
 
         if inventory.is_low_stock:

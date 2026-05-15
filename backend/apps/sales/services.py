@@ -117,6 +117,17 @@ class SaleService:
 
         sale.status = Sale.Status.CANCELLED
         sale.save(update_fields=['status', 'updated_at'])
+
+        from apps.audit.services import log_action
+        from apps.audit.models import AuditLog
+        log_action(
+            action=AuditLog.Action.SALE_CANCELLED,
+            target_type='sale',
+            target_id=str(sale.id),
+            actor=cancelled_by,
+            metadata={'total': str(sale.total), 'cashier_id': str(sale.cashier_id)},
+        )
+
         return sale
 
     @staticmethod
