@@ -24,6 +24,8 @@ from apps.products.api import router as products_router
 from apps.sales.api import router as sales_router
 from apps.payments.api import router as payments_router
 from apps.billing.api import router as billing_router
+from apps.reports.api import router as reports_router
+from apps.audit.api import router as audit_router
 from core.health import router as health_router
 
 api = NinjaAPI(
@@ -38,6 +40,8 @@ api.add_router('/products', products_router)
 api.add_router('/sales', sales_router)
 api.add_router('/payments', payments_router)
 api.add_router('/billing', billing_router)
+api.add_router('/reports', reports_router)
+api.add_router('/audit', audit_router)
 api.add_router('/health', health_router)
 
 urlpatterns = [
