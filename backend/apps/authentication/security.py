@@ -24,4 +24,6 @@ class CookieJWTAuth(APIKeyCookie):
             return None
 
 
-cookie_auth = CookieJWTAuth()
+# csrf=False: APIKeyCookie.__init__ sets self.csrf as instance attribute.
+# Passing it here is the only way to override it (class attribute is shadowed).
+cookie_auth = CookieJWTAuth(csrf=False)
