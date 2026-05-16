@@ -82,12 +82,12 @@
 
 ---
 
-### Phase F7 — Reports & Audit
-- [ ] Revenue report with line/bar chart (recharts)
-- [ ] Best sellers report with horizontal bar chart
-- [ ] Inventory valuation report table
-- [ ] Date range picker shared across reports
-- [ ] Audit log table with filters (action, actor, date range) — admin only
+### Phase F7 — Reports & Audit ✅
+- [x] Revenue report with line chart (recharts) + summary cards
+- [x] Best sellers report with horizontal bar chart + ranking table
+- [x] Inventory valuation report table with total valuation badge
+- [x] Date range picker on revenue and best sellers tabs
+- [x] Audit log table with action, target type, and date range filters — admin only
 
 **Deliverable:** Management has full visibility into revenue trends and sensitive system actions.
 
