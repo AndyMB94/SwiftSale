@@ -30,16 +30,16 @@
 
 ---
 
-### Phase F3 — POS Interface
-- [ ] Full-screen POS layout (no sidebar)
-- [ ] Product grid with search and barcode input
-- [ ] Cart: add, remove, update quantity
-- [ ] Discount input, IGV calculation, totals
-- [ ] Payment method selector (cash / card / Yape / Plin)
-- [ ] Cash flow: amount received → change calculator → confirm
-- [ ] Yape/Plin flow: QR screen + countdown timer
-- [ ] Sale submission (POST /sales/)
-- [ ] Success screen with sale summary
+### Phase F3 — POS Interface ✅
+- [x] Full-screen POS layout (no sidebar)
+- [x] Product grid with search and barcode input
+- [x] Cart: add, remove, update quantity
+- [x] Discount input, IGV calculation, totals
+- [x] Payment method selector (cash / card / Yape / Plin)
+- [x] Cash flow: amount received → change calculator → confirm
+- [x] Yape/Plin flow: QR screen + countdown timer
+- [x] Sale submission (POST /sales/)
+- [x] Success screen with sale summary
 
 **Deliverable:** Cashier can complete a full sale end-to-end from product selection to payment confirmation.
 
