@@ -59,6 +59,7 @@ Each phase delivers a vertical slice of working functionality — no half-built 
 - [x] Inventory deduction on sale completion (atomic)
 - [x] Inventory rollback on sale cancellation
 - [x] Cashier-facing POS endpoints
+- [x] Atomic checkout endpoint (`POST /checkout/`) — sale + payment in one transaction with full rollback on failure
 - [x] Unit tests for pricing and tax logic
 - [x] Integration tests for full checkout flow
 

@@ -123,11 +123,62 @@ JWT is set via `Set-Cookie` header (httpOnly, Secure, SameSite=Lax).
 
 ---
 
+## Checkout
+
+| Method | Endpoint | Description | Role |
+|--------|----------|-------------|------|
+| POST | `/checkout/` | Create sale + payment atomically | Cashier |
+
+Single endpoint that creates the sale and registers the payment in one database transaction.
+If payment validation fails, the entire operation rolls back — no orphan sale, no stock decrement.
+
+### Checkout request
+```json
+{
+  "items": [
+    { "product_id": "uuid", "quantity": 2 }
+  ],
+  "discount": "0.50",
+  "method": "cash",
+  "idempotency_key": "uuid"
+}
+```
+
+### Checkout response
+```json
+{
+  "sale": {
+    "id": "uuid",
+    "status": "completed",
+    "subtotal": "13.00",
+    "discount": "0.00",
+    "tax": "2.34",
+    "total": "15.34",
+    "items": [...],
+    "payment": { "method": "cash", "amount": "15.34", "status": "paid" },
+    "created_at": "2026-05-15T21:39:54Z"
+  },
+  "payment": {
+    "id": "uuid",
+    "method": "cash",
+    "amount": "15.34",
+    "status": "paid",
+    "idempotency_key": "uuid",
+    "created_at": "2026-05-15T21:39:54Z"
+  }
+}
+```
+
+> **Note:** `POST /sales/` and `POST /payments/` remain available for advanced flows
+> (e.g. deferred payment, webhook-confirmed QR). The POS uses `/checkout/`.
+
+---
+
 ## Sales
 
 | Method | Endpoint | Description | Role |
 |--------|----------|-------------|------|
-| POST | `/sales/` | Create a new sale | Cashier, Supervisor |
+| POST | `/sales/` | Create a new sale (no payment) | Cashier, Supervisor |
 | GET | `/sales/` | List sales (paginated) | Admin, Supervisor |
 | GET | `/sales/{id}/` | Sale detail | Admin, Supervisor |
 | POST | `/sales/{id}/cancel/` | Cancel a sale | Admin, Supervisor |
@@ -166,6 +217,7 @@ JWT is set via `Set-Cookie` header (httpOnly, Secure, SameSite=Lax).
 | Method | Endpoint | Description | Role |
 |--------|----------|-------------|------|
 | POST | `/payments/` | Process payment for a sale | Cashier, Supervisor |
+| GET | `/payments/` | List payments (paginated) | Admin, Supervisor |
 | GET | `/payments/{id}/` | Payment detail | Admin, Supervisor |
 | POST | `/payments/webhooks/{provider}/` | Receive webhook from provider | Public (verified) |
 

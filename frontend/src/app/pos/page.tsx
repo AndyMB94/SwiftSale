@@ -17,8 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getProducts } from "@/services/products";
-import { createSale } from "@/services/sales";
-import { createPayment } from "@/services/payments";
+import { createCheckout } from "@/services/checkout";
 import { usePosStore } from "@/store/posStore";
 import { useAuthStore } from "@/store/authStore";
 import { formatCurrency } from "@/utils/formatters";
@@ -112,20 +111,13 @@ export default function PosPage() {
   async function submitSale() {
     setStep("processing");
     try {
-      const saleRes = await createSale({
+      const res = await createCheckout({
         items: items.map((i) => ({ product_id: i.product.id, quantity: i.quantity })),
         discount: discountNum > 0 ? discountNum.toFixed(2) : undefined,
-      });
-      const sale = saleRes.data;
-
-      await createPayment({
-        sale_id: sale.id,
         method: paymentMethod!,
-        amount: sale.total,  // always the sale total — backend validates amount == sale.total
         idempotency_key: idempotencyKey.current,
       });
-
-      setCompletedSale(sale);
+      setCompletedSale(res.data.sale);
       setStep("success");
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;

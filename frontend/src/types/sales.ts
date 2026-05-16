@@ -86,6 +86,18 @@ export interface PaymentCreateInput {
   idempotency_key: string;
 }
 
+export interface CheckoutInput {
+  items: { product_id: string; quantity: number }[];
+  discount?: string;
+  method: PaymentMethod;
+  idempotency_key: string;
+}
+
+export interface CheckoutOut {
+  sale: Sale;
+  payment: Payment;
+}
+
 export interface PaymentListItem {
   id: string;
   sale_id: string;

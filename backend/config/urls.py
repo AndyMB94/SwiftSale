@@ -26,6 +26,7 @@ from apps.payments.api import router as payments_router
 from apps.products.api import router as products_router
 from apps.reports.api import router as reports_router
 from apps.sales.api import router as sales_router
+from apps.sales.checkout import router as checkout_router
 from apps.users.api import router as users_router
 from core.health import router as health_router
 
@@ -39,6 +40,7 @@ api.add_router("/auth", auth_router)
 api.add_router("/users", users_router)
 api.add_router("/products", products_router)
 api.add_router("/sales", sales_router)
+api.add_router("/checkout", checkout_router)
 api.add_router("/payments", payments_router)
 api.add_router("/billing", billing_router)
 api.add_router("/reports", reports_router)
