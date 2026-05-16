@@ -68,7 +68,9 @@ async def test_cashier_rejected_without_token():
 @pytest.mark.asyncio
 async def test_cashier_connects_and_joins_own_group(cashier):
     token = make_token(cashier)
-    communicator = WebsocketCommunicator(application, "/ws/notifications/", headers=list(ws_scope(token)["headers"]))
+    communicator = WebsocketCommunicator(
+        application, "/ws/notifications/", headers=list(ws_scope(token)["headers"])
+    )
     connected, _ = await communicator.connect()
     assert connected
 
@@ -87,7 +89,9 @@ async def test_cashier_connects_and_joins_own_group(cashier):
 @pytest.mark.asyncio
 async def test_cashier_does_not_receive_staff_notifications(cashier):
     token = make_token(cashier)
-    communicator = WebsocketCommunicator(application, "/ws/notifications/", headers=list(ws_scope(token)["headers"]))
+    communicator = WebsocketCommunicator(
+        application, "/ws/notifications/", headers=list(ws_scope(token)["headers"])
+    )
     connected, _ = await communicator.connect()
     assert connected
 
@@ -105,14 +109,19 @@ async def test_cashier_does_not_receive_staff_notifications(cashier):
 @pytest.mark.asyncio
 async def test_supervisor_receives_staff_notifications(supervisor):
     token = make_token(supervisor)
-    communicator = WebsocketCommunicator(application, "/ws/notifications/", headers=list(ws_scope(token)["headers"]))
+    communicator = WebsocketCommunicator(
+        application, "/ws/notifications/", headers=list(ws_scope(token)["headers"])
+    )
     connected, _ = await communicator.connect()
     assert connected
 
     channel_layer = get_channel_layer()
     await channel_layer.group_send(
         "staff_notifications",
-        {"type": "notification.message", "payload": {"event": "inventory.low_stock", "product_name": "Test"}},
+        {
+            "type": "notification.message",
+            "payload": {"event": "inventory.low_stock", "product_name": "Test"},
+        },
     )
     msg = await communicator.receive_json_from(timeout=2)
     assert msg["event"] == "inventory.low_stock"
@@ -124,14 +133,19 @@ async def test_supervisor_receives_staff_notifications(supervisor):
 @pytest.mark.asyncio
 async def test_admin_receives_staff_notifications(admin):
     token = make_token(admin)
-    communicator = WebsocketCommunicator(application, "/ws/notifications/", headers=list(ws_scope(token)["headers"]))
+    communicator = WebsocketCommunicator(
+        application, "/ws/notifications/", headers=list(ws_scope(token)["headers"])
+    )
     connected, _ = await communicator.connect()
     assert connected
 
     channel_layer = get_channel_layer()
     await channel_layer.group_send(
         "staff_notifications",
-        {"type": "notification.message", "payload": {"event": "inventory.low_stock", "product_name": "Test"}},
+        {
+            "type": "notification.message",
+            "payload": {"event": "inventory.low_stock", "product_name": "Test"},
+        },
     )
     msg = await communicator.receive_json_from(timeout=2)
     assert msg["event"] == "inventory.low_stock"
