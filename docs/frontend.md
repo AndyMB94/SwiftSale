@@ -60,21 +60,22 @@
 - [x] Sales history table with date range + status filter
 - [x] Sale detail slide-over (items, totals, payment info)
 - [x] Cancel sale action (supervisor/admin)
-- [ ] Link to billing document from sale detail *(blocked — requires F6)*
+- [x] Link to billing documents from sale detail (navigates to /billing?sale_id=xxx)
 - [x] Payments table with status badges
 
 **Deliverable:** Supervisors can review and manage all sales and payment records.
 
 ---
 
-### Phase F6 — Billing (SUNAT)
-- [ ] Billing documents table with SUNAT status badges
-- [ ] Issue boleta modal (DNI customer data)
-- [ ] Issue factura modal (RUC + company address)
-- [ ] Document detail with SUNAT response and error code if rejected
-- [ ] Void document with confirmation (admin only)
-- [ ] Download XML (CDR) button
-- [ ] Download PDF receipt button
+### Phase F6 — Billing (SUNAT) ✅
+- [x] Billing documents table with SUNAT status badges
+- [x] Issue boleta modal (DNI/CE/Pasaporte customer data)
+- [x] Issue factura modal (RUC + company address)
+- [x] Document detail slide-over with SUNAT response code
+- [x] Void document with confirmation (admin only)
+- [x] Filter by sale_id from URL param (auto-applied when navigating from sales slide-over)
+- [ ] Download XML (CDR) button *(requires backend CDR storage)*
+- [ ] Download PDF receipt button *(requires Celery async task)*
 
 **Deliverable:** Staff can issue legally valid boletas and facturas and track their SUNAT submission status.
 

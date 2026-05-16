@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, Eye, XCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight, Eye, FileText, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +62,7 @@ const STATUS_VARIANTS: Record<
 
 export default function SalesPage() {
   const qc = useQueryClient();
+  const router = useRouter();
 
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
@@ -384,6 +386,20 @@ export default function SalesPage() {
                   <span>{formatCurrency(detail.total)}</span>
                 </div>
               </div>
+
+              {/* Billing link */}
+              <Separator />
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  setSheetOpen(false);
+                  router.push(`/billing?sale_id=${detail.id}`);
+                }}
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Ver comprobantes
+              </Button>
 
               {/* Cancel action */}
               {detail.status === "completed" && (
