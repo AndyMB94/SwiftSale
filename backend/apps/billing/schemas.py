@@ -33,6 +33,7 @@ class IssueFacturaIn(Schema):
 
 class BillingDocumentOut(Schema):
     id: UUID
+    sale_id: UUID
     full_number: str
     document_type: str
     status: str
@@ -45,6 +46,21 @@ class BillingDocumentOut(Schema):
     sunat_response_code: str
     issued_at: datetime
     voided_at: datetime | None
+
+
+class BillingDocumentListOut(Schema):
+    count: int
+    total_pages: int
+    page: int
+    page_size: int
+    results: list[BillingDocumentOut]
+
+
+class BillingSeriesOut(Schema):
+    id: int
+    series: str
+    document_type: str
+    last_correlativo: int
 
 
 class VoidDocumentIn(Schema):
