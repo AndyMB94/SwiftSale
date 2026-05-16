@@ -20,6 +20,14 @@ export interface SaleItemOut {
   subtotal: string;
 }
 
+export interface PaymentSummary {
+  id: string;
+  method: PaymentMethod;
+  amount: string;
+  status: PaymentStatus;
+  created_at: string;
+}
+
 export interface Sale {
   id: string;
   cashier_id: string;
@@ -30,7 +38,29 @@ export interface Sale {
   tax: string;
   total: string;
   items: SaleItemOut[];
+  payment: PaymentSummary | null;
   created_at: string;
+}
+
+export interface SaleListItem {
+  id: string;
+  cashier_name: string;
+  status: SaleStatus;
+  subtotal: string;
+  discount: string;
+  tax: string;
+  total: string;
+  item_count: number;
+  payment: PaymentSummary | null;
+  created_at: string;
+}
+
+export interface SaleListResponse {
+  count: number;
+  total_pages: number;
+  page: number;
+  page_size: number;
+  results: SaleListItem[];
 }
 
 export interface SaleCreateInput {
@@ -54,4 +84,23 @@ export interface PaymentCreateInput {
   method: PaymentMethod;
   amount: string;
   idempotency_key: string;
+}
+
+export interface PaymentListItem {
+  id: string;
+  sale_id: string;
+  cashier_name: string;
+  method: PaymentMethod;
+  amount: string;
+  status: PaymentStatus;
+  provider_ref: string | null;
+  created_at: string;
+}
+
+export interface PaymentListResponse {
+  count: number;
+  total_pages: number;
+  page: number;
+  page_size: number;
+  results: PaymentListItem[];
 }

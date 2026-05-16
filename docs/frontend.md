@@ -56,12 +56,12 @@
 
 ---
 
-### Phase F5 — Sales & Payments
-- [ ] Sales history table with date range + status filter
-- [ ] Sale detail slide-over (items, totals, payment info)
-- [ ] Cancel sale action (supervisor/admin)
-- [ ] Link to billing document from sale detail
-- [ ] Payments table with status badges
+### Phase F5 — Sales & Payments ✅
+- [x] Sales history table with date range + status filter
+- [x] Sale detail slide-over (items, totals, payment info)
+- [x] Cancel sale action (supervisor/admin)
+- [ ] Link to billing document from sale detail *(blocked — requires F6)*
+- [x] Payments table with status badges
 
 **Deliverable:** Supervisors can review and manage all sales and payment records.
 
