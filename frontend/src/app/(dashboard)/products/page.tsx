@@ -244,7 +244,7 @@ export default function ProductsPage() {
 
       {/* Filters */}
       <div className="flex items-center gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-[200px] max-w-sm">
+        <div className="relative flex-1 min-w-50 max-w-sm">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <Input
             placeholder="Buscar por nombre, SKU o código..."
@@ -345,7 +345,7 @@ export default function ProductsPage() {
 
       {/* Product Sheet */}
       <Sheet open={productSheet} onOpenChange={(o) => { if (!o) closeProductSheet(); }}>
-        <SheetContent className="w-[420px] sm:w-[480px] overflow-y-auto" aria-describedby={undefined}>
+        <SheetContent className="w-105 sm:w-120 overflow-y-auto" aria-describedby={undefined}>
           <SheetHeader>
             <SheetTitle>{editingProduct ? "Editar producto" : "Nuevo producto"}</SheetTitle>
           </SheetHeader>
@@ -447,7 +447,7 @@ export default function ProductsPage() {
 
       {/* Category Sheet */}
       <Sheet open={catSheet} onOpenChange={setCatSheet}>
-        <SheetContent className="w-[380px] overflow-y-auto" aria-describedby={undefined}>
+        <SheetContent className="w-95 overflow-y-auto" aria-describedby={undefined}>
           <SheetHeader>
             <SheetTitle>Gestionar categorías</SheetTitle>
           </SheetHeader>
