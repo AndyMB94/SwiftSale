@@ -21,6 +21,7 @@ import { createCheckout } from "@/services/checkout";
 import { usePosStore } from "@/store/posStore";
 import { useAuthStore } from "@/store/authStore";
 import { formatCurrency } from "@/utils/formatters";
+import { useWebSocket } from "@/hooks/useWebSocket";
 import type { PaymentMethod, Sale } from "@/types/sales";
 
 // IGV matches the backend constant (18%)
@@ -45,6 +46,21 @@ export default function PosPage() {
   const [completedSale, setCompletedSale] = useState<Sale | null>(null);
   const [countdown, setCountdown] = useState(120);
   const idempotencyKey = useRef(crypto.randomUUID());
+
+  // ── WebSocket — auto-confirm Yape/Plin on payment.confirmed ─────────────────
+
+  const stepRef = useRef(step);
+  stepRef.current = step;
+
+  useWebSocket({
+    onMessage: (msg) => {
+      if (msg.event === "payment.confirmed" && stepRef.current === "qr") {
+        submitSale();
+      } else if (msg.event === "payment.failed" && stepRef.current === "qr") {
+        toast.error("Pago rechazado. Solicita al cliente que reintente.");
+      }
+    },
+  });
 
   // ── Product query (fetch all for instant client-side filtering) ────────────
 

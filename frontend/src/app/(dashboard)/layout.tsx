@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import { useAuthStore } from "@/store/authStore";
 import { useAuthInit } from "@/hooks/useAuth";
+import { useWebSocket, type WsMessage } from "@/hooks/useWebSocket";
 
 export default function DashboardLayout({
   children,
@@ -18,6 +20,23 @@ export default function DashboardLayout({
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isLoading = useAuthStore((s) => s.isLoading);
   const role = useAuthStore((s) => s.role);
+
+  const handleWsMessage = useCallback(
+    (msg: WsMessage) => {
+      if (msg.event === "inventory.low_stock") {
+        toast.warning(
+          `Stock bajo: ${msg.product_name} (${msg.current_quantity} uds.)`,
+          { duration: 8000 },
+        );
+      }
+    },
+    [],
+  );
+
+  useWebSocket({
+    onMessage: handleWsMessage,
+    enabled: isAuthenticated && (role === "admin" || role === "supervisor"),
+  });
 
   useEffect(() => {
     if (isLoading) return;

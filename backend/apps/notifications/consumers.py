@@ -11,6 +11,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     `user_{user_id}` so tasks can push targeted notifications.
     """
 
+    STAFF_GROUP = "staff_notifications"
+
     async def connect(self):
         user = await self._authenticate()
         if user is None:
@@ -21,11 +23,15 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         self.group_name = f"user_{user.id}"
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
+        if user.role in ("admin", "supervisor"):
+            await self.channel_layer.group_add(self.STAFF_GROUP, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
         if hasattr(self, "group_name"):
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
+        if hasattr(self, "user") and self.user.role in ("admin", "supervisor"):
+            await self.channel_layer.group_discard(self.STAFF_GROUP, self.channel_name)
 
     async def receive(self, text_data=None, bytes_data=None):
         # Clients do not send messages — server-push only

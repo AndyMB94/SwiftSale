@@ -45,12 +45,13 @@
 
 ---
 
-### Phase F4 — Real-Time (WebSocket)
-- [ ] `useWebSocket` hook with auto-reconnect
-- [ ] `payment.confirmed` event → success banner on POS screen
-- [ ] `payment.failed` event → error banner with retry option
-- [ ] `inventory.low_stock` event → alert badge on sidebar inventory item
-- [ ] REST fallback polling on WebSocket disconnect
+### Phase F4 — Real-Time (WebSocket) ✅
+- [x] `useWebSocket` hook with exponential backoff auto-reconnect (max 5 retries)
+- [x] `payment.confirmed` event → auto-triggers checkout completion on POS QR step
+- [x] `payment.failed` event → error toast on POS QR step
+- [x] `inventory.low_stock` event → warning toast in dashboard layout (admin/supervisor only)
+- [x] Backend: `NotificationConsumer` now joins `staff_notifications` group for admin/supervisor users
+- [ ] REST fallback polling on WebSocket disconnect *(deferred — reconnect handles most cases)*
 
 **Deliverable:** Cashier screen updates instantly on Yape/Plin payment confirmation without manual refresh.
 
