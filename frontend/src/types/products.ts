@@ -37,6 +37,9 @@ export interface Product {
 
 export interface ProductListResponse {
   count: number;
+  total_pages: number;
+  page: number;
+  page_size: number;
   results: Product[];
 }
 
@@ -67,6 +70,14 @@ export interface InventoryItem {
   low_stock_threshold: number;
   is_low_stock: boolean;
   updated_at: string;
+}
+
+export interface InventoryListResponse {
+  count: number;
+  total_pages: number;
+  page: number;
+  page_size: number;
+  results: InventoryItem[];
 }
 
 export interface InventoryAdjustInput {

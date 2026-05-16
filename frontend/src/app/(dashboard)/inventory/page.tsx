@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { History } from "lucide-react";
+import { ChevronLeft, ChevronRight, History, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +42,8 @@ import { formatDateTime } from "@/utils/formatters";
 import { ADJUSTMENT_REASONS } from "@/utils/constants";
 import type { InventoryItem, InventoryMovement } from "@/types/products";
 
+const PAGE_SIZE = 20;
+
 const MOVEMENT_LABELS: Record<string, string> = {
   sale: "Venta",
   purchase: "Compra",
@@ -51,7 +53,11 @@ const MOVEMENT_LABELS: Record<string, string> = {
 
 export default function InventoryPage() {
   const qc = useQueryClient();
+
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [lowStockOnly, setLowStockOnly] = useState(false);
+  const [page, setPage] = useState(1);
 
   // Adjust dialog
   const [adjustTarget, setAdjustTarget] = useState<InventoryItem | null>(null);
@@ -61,11 +67,28 @@ export default function InventoryPage() {
   // Movements sheet
   const [movementsTarget, setMovementsTarget] = useState<InventoryItem | null>(null);
 
+  // Debounce search — 350 ms
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 350);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, lowStockOnly]);
+
   // ── Queries ────────────────────────────────────────────────────────────────
 
   const { data: inventoryRes, isLoading } = useQuery({
-    queryKey: ["inventory", { lowStockOnly }],
-    queryFn: () => getInventory(lowStockOnly),
+    queryKey: ["inventory", { lowStockOnly, debouncedSearch, page }],
+    queryFn: () =>
+      getInventory({
+        low_stock_only: lowStockOnly,
+        search: debouncedSearch || undefined,
+        page,
+        page_size: PAGE_SIZE,
+      }),
   });
 
   const { data: movementsRes, isLoading: loadingMovements } = useQuery({
@@ -74,8 +97,13 @@ export default function InventoryPage() {
     enabled: !!movementsTarget,
   });
 
-  const inventory = inventoryRes?.data ?? [];
+  const inventory = inventoryRes?.data.results ?? [];
+  const totalCount = inventoryRes?.data.count ?? 0;
+  const totalPages = inventoryRes?.data.total_pages ?? 1;
   const movements: InventoryMovement[] = movementsRes?.data ?? [];
+
+  const pageStart = totalCount === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const pageEnd = Math.min(page * PAGE_SIZE, totalCount);
 
   // ── Mutations ──────────────────────────────────────────────────────────────
 
@@ -120,7 +148,7 @@ export default function InventoryPage() {
         <div>
           <h2 className="text-xl font-bold tracking-tight">Inventario</h2>
           <p className="text-sm text-slate-500">
-            {isLoading ? "Cargando..." : `${inventory.length} producto${inventory.length !== 1 ? "s" : ""}`}
+            {isLoading ? "Cargando..." : `${totalCount} producto${totalCount !== 1 ? "s" : ""}`}
           </p>
         </div>
         <Button
@@ -130,6 +158,17 @@ export default function InventoryPage() {
         >
           {lowStockOnly ? "Ver todos" : "Solo stock bajo"}
         </Button>
+      </div>
+
+      {/* Search */}
+      <div className="relative max-w-sm">
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <Input
+          placeholder="Buscar por nombre o SKU..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-8 h-9"
+        />
       </div>
 
       {/* Table */}
@@ -157,7 +196,11 @@ export default function InventoryPage() {
             ) : inventory.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center text-slate-400 py-10 text-sm">
-                  {lowStockOnly ? "No hay productos con stock bajo" : "Sin registros de inventario"}
+                  {debouncedSearch
+                    ? "Sin resultados para la búsqueda"
+                    : lowStockOnly
+                    ? "No hay productos con stock bajo"
+                    : "Sin registros de inventario"}
                 </TableCell>
               </TableRow>
             ) : (
@@ -208,6 +251,38 @@ export default function InventoryPage() {
             )}
           </TableBody>
         </Table>
+
+        {/* Pagination footer */}
+        {!isLoading && totalCount > 0 && (
+          <div className="flex items-center justify-between px-4 py-3 border-t border-border text-sm text-slate-500">
+            <span>
+              Mostrando {pageStart}–{pageEnd} de {totalCount} productos
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                disabled={page === 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                <ChevronLeft size={14} />
+              </Button>
+              <span className="text-xs tabular-nums">
+                Página {page} de {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                <ChevronRight size={14} />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Adjust Dialog */}

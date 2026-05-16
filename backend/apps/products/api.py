@@ -12,6 +12,7 @@ from .schemas import (
     CategoryOut,
     CategoryUpdateInput,
     InventoryAdjustInput,
+    InventoryListOut,
     InventoryMovementOut,
     InventoryOut,
     ProductCreateInput,
@@ -68,12 +69,22 @@ def list_products(
     request: HttpRequest,
     include_inactive: bool = False,
     category_id: uuid.UUID | None = None,
+    search: str | None = None,
+    page: int = 1,
+    page_size: int = 20,
 ):
-    products = ProductService.list_products(
-        include_inactive=include_inactive, category_id=category_id
+    products, count, total_pages = ProductService.list_products(
+        include_inactive=include_inactive,
+        category_id=category_id,
+        search=search,
+        page=page,
+        page_size=page_size,
     )
     return ProductListOut(
-        count=len(products),
+        count=count,
+        total_pages=total_pages,
+        page=page,
+        page_size=page_size,
         results=[ProductOut.from_orm(p) for p in products],
     )
 
@@ -116,21 +127,38 @@ def delete_product(request: HttpRequest, product_id: uuid.UUID):
 # ── Inventory ─────────────────────────────────────────────────────────────────
 
 
-@router.get("/inventory", response=list[InventoryOut], auth=cookie_auth)
-def list_inventory(request: HttpRequest, low_stock_only: bool = False):
-    items = InventoryService.list_inventory(low_stock_only=low_stock_only)
-    return [
-        InventoryOut(
-            product_id=inv.product_id,
-            product_name=inv.product.name,
-            sku=inv.product.sku,
-            quantity=inv.quantity,
-            low_stock_threshold=inv.low_stock_threshold,
-            is_low_stock=inv.is_low_stock,
-            updated_at=inv.updated_at,
-        )
-        for inv in items
-    ]
+@router.get("/inventory", response=InventoryListOut, auth=cookie_auth)
+def list_inventory(
+    request: HttpRequest,
+    low_stock_only: bool = False,
+    search: str | None = None,
+    page: int = 1,
+    page_size: int = 20,
+):
+    items, count, total_pages = InventoryService.list_inventory(
+        low_stock_only=low_stock_only,
+        search=search,
+        page=page,
+        page_size=page_size,
+    )
+    return InventoryListOut(
+        count=count,
+        total_pages=total_pages,
+        page=page,
+        page_size=page_size,
+        results=[
+            InventoryOut(
+                product_id=inv.product_id,
+                product_name=inv.product.name,
+                sku=inv.product.sku,
+                quantity=inv.quantity,
+                low_stock_threshold=inv.low_stock_threshold,
+                is_low_stock=inv.is_low_stock,
+                updated_at=inv.updated_at,
+            )
+            for inv in items
+        ],
+    )
 
 
 @router.get("/inventory/{product_id}", response=InventoryOut, auth=cookie_auth)

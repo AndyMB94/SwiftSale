@@ -1,7 +1,8 @@
+import math
 import uuid
 from decimal import Decimal
 
-from django.db import transaction
+from django.db import models, transaction
 from ninja.errors import HttpError
 
 from .models import Category, Inventory, InventoryMovement, Product
@@ -64,14 +65,28 @@ class CategoryService:
 class ProductService:
     @staticmethod
     def list_products(
-        include_inactive: bool = False, category_id: uuid.UUID | None = None
-    ):
+        include_inactive: bool = False,
+        category_id: uuid.UUID | None = None,
+        search: str | None = None,
+        page: int = 1,
+        page_size: int = 20,
+    ) -> tuple[list, int, int]:
         qs = Product.objects.select_related("category").all()
         if not include_inactive:
             qs = qs.filter(is_active=True)
         if category_id:
             qs = qs.filter(category_id=category_id)
-        return list(qs)
+        if search:
+            qs = qs.filter(
+                models.Q(name__icontains=search)
+                | models.Q(sku__icontains=search)
+                | models.Q(barcode__icontains=search)
+            )
+        count = qs.count()
+        total_pages = max(1, math.ceil(count / page_size))
+        page = max(1, min(page, total_pages))
+        offset = (page - 1) * page_size
+        return list(qs[offset : offset + page_size]), count, total_pages
 
     @staticmethod
     def get_product(product_id: uuid.UUID) -> Product:
@@ -180,13 +195,27 @@ class InventoryService:
             raise HttpError(404, "Inventory not found")
 
     @staticmethod
-    def list_inventory(low_stock_only: bool = False):
+    def list_inventory(
+        low_stock_only: bool = False,
+        search: str | None = None,
+        page: int = 1,
+        page_size: int = 20,
+    ) -> tuple[list, int, int]:
         qs = Inventory.objects.select_related("product").filter(product__is_active=True)
         if low_stock_only:
             from django.db.models import F
 
             qs = qs.filter(quantity__lte=F("low_stock_threshold"))
-        return list(qs)
+        if search:
+            qs = qs.filter(
+                models.Q(product__name__icontains=search)
+                | models.Q(product__sku__icontains=search)
+            )
+        count = qs.count()
+        total_pages = max(1, math.ceil(count / page_size))
+        page = max(1, min(page, total_pages))
+        offset = (page - 1) * page_size
+        return list(qs[offset : offset + page_size]), count, total_pages
 
     @staticmethod
     @transaction.atomic

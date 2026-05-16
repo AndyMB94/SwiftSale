@@ -83,6 +83,9 @@ class ProductOut(Schema):
 
 class ProductListOut(Schema):
     count: int
+    total_pages: int
+    page: int
+    page_size: int
     results: list[ProductOut]
 
 
@@ -97,6 +100,14 @@ class InventoryOut(Schema):
     low_stock_threshold: int
     is_low_stock: bool
     updated_at: datetime
+
+
+class InventoryListOut(Schema):
+    count: int
+    total_pages: int
+    page: int
+    page_size: int
+    results: list[InventoryOut]
 
 
 class InventoryAdjustInput(Schema):

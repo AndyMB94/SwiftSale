@@ -6,6 +6,7 @@ import type {
   CategoryUpdateInput,
   InventoryAdjustInput,
   InventoryItem,
+  InventoryListResponse,
   InventoryMovement,
   Product,
   ProductCreateInput,
@@ -31,6 +32,9 @@ export const updateCategory = (id: string, data: CategoryUpdateInput) =>
 export const getProducts = (params?: {
   include_inactive?: boolean;
   category_id?: string;
+  search?: string;
+  page?: number;
+  page_size?: number;
 }) => api.get<ProductListResponse>("/api/v1/products/products", { params });
 
 export const createProduct = (data: ProductCreateInput) =>
@@ -44,10 +48,12 @@ export const deleteProduct = (id: string) =>
 
 // ── Inventory ─────────────────────────────────────────────────────────────────
 
-export const getInventory = (lowStockOnly = false) =>
-  api.get<InventoryItem[]>("/api/v1/products/inventory", {
-    params: { low_stock_only: lowStockOnly },
-  });
+export const getInventory = (params?: {
+  low_stock_only?: boolean;
+  search?: string;
+  page?: number;
+  page_size?: number;
+}) => api.get<InventoryListResponse>("/api/v1/products/inventory", { params });
 
 export const adjustStock = (productId: string, data: InventoryAdjustInput) =>
   api.post<InventoryItem>(

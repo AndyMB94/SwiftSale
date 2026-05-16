@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Pencil, Plus, Search, Tag, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pencil, Plus, Search, Tag, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -54,7 +54,7 @@ import type {
   ProductCreateInput,
 } from "@/types/products";
 
-// ── Product form state ────────────────────────────────────────────────────────
+const PAGE_SIZE = 20;
 
 const EMPTY_FORM = {
   name: "",
@@ -65,15 +65,15 @@ const EMPTY_FORM = {
   category_id: "",
 };
 
-// ── Main page ─────────────────────────────────────────────────────────────────
-
 export default function ProductsPage() {
   const qc = useQueryClient();
 
   // Filters
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [includeInactive, setIncludeInactive] = useState(false);
+  const [page, setPage] = useState(1);
 
   // Product sheet
   const [productSheet, setProductSheet] = useState(false);
@@ -88,14 +88,28 @@ export default function ProductsPage() {
   const [newCatName, setNewCatName] = useState("");
   const [newCatDesc, setNewCatDesc] = useState("");
 
+  // Debounce search — 350 ms
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 350);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  // Reset to page 1 when any filter changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, categoryFilter, includeInactive]);
+
   // ── Queries ────────────────────────────────────────────────────────────────
 
   const { data: productsRes, isLoading: loadingProducts } = useQuery({
-    queryKey: ["products", { includeInactive, categoryFilter }],
+    queryKey: ["products", { includeInactive, categoryFilter, debouncedSearch, page }],
     queryFn: () =>
       getProducts({
         include_inactive: includeInactive,
         category_id: categoryFilter !== "all" ? categoryFilter : undefined,
+        search: debouncedSearch || undefined,
+        page,
+        page_size: PAGE_SIZE,
       }),
   });
 
@@ -105,18 +119,12 @@ export default function ProductsPage() {
   });
 
   const products = productsRes?.data.results ?? [];
+  const totalCount = productsRes?.data.count ?? 0;
+  const totalPages = productsRes?.data.total_pages ?? 1;
   const categories = categoriesRes?.data.results ?? [];
 
-  const filtered = useMemo(() => {
-    if (!search.trim()) return products;
-    const q = search.toLowerCase();
-    return products.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.sku.toLowerCase().includes(q) ||
-        p.barcode?.toLowerCase().includes(q),
-    );
-  }, [products, search]);
+  const pageStart = totalCount === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const pageEnd = Math.min(page * PAGE_SIZE, totalCount);
 
   // ── Mutations ──────────────────────────────────────────────────────────────
 
@@ -227,7 +235,7 @@ export default function ProductsPage() {
         <div>
           <h2 className="text-xl font-bold tracking-tight">Productos</h2>
           <p className="text-sm text-slate-500">
-            {loadingProducts ? "Cargando..." : `${filtered.length} producto${filtered.length !== 1 ? "s" : ""}`}
+            {loadingProducts ? "Cargando..." : `${totalCount} producto${totalCount !== 1 ? "s" : ""}`}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -296,14 +304,14 @@ export default function ProductsPage() {
                   ))}
                 </TableRow>
               ))
-            ) : filtered.length === 0 ? (
+            ) : products.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center text-slate-400 py-10 text-sm">
-                  {search ? "Sin resultados para la búsqueda" : "No hay productos registrados"}
+                  {debouncedSearch ? "Sin resultados para la búsqueda" : "No hay productos registrados"}
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((product) => (
+              products.map((product) => (
                 <TableRow key={product.id} className={!product.is_active ? "opacity-50" : ""}>
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell className="text-slate-500 font-mono text-xs">{product.sku}</TableCell>
@@ -341,6 +349,38 @@ export default function ProductsPage() {
             )}
           </TableBody>
         </Table>
+
+        {/* Pagination footer */}
+        {!loadingProducts && totalCount > 0 && (
+          <div className="flex items-center justify-between px-4 py-3 border-t border-border text-sm text-slate-500">
+            <span>
+              Mostrando {pageStart}–{pageEnd} de {totalCount} productos
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                disabled={page === 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                <ChevronLeft size={14} />
+              </Button>
+              <span className="text-xs tabular-nums">
+                Página {page} de {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                <ChevronRight size={14} />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Product Sheet */}
@@ -452,7 +492,6 @@ export default function ProductsPage() {
             <SheetTitle>Gestionar categorías</SheetTitle>
           </SheetHeader>
           <div className="space-y-5 mt-6">
-            {/* New category form */}
             <div className="space-y-3 p-4 rounded-lg border border-border bg-muted/40">
               <p className="text-sm font-medium">Nueva categoría</p>
               <Input
@@ -474,7 +513,6 @@ export default function ProductsPage() {
                 {createCatMutation.isPending ? "Creando..." : "Crear categoría"}
               </Button>
             </div>
-            {/* Category list */}
             <div className="space-y-2">
               {categories.map((cat) => (
                 <div
