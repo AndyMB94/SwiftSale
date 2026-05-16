@@ -1,8 +1,9 @@
 import hashlib
 import hmac
 import logging
+import math
 import uuid
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 
 from django.conf import settings
@@ -162,6 +163,30 @@ class PaymentService:
         mac = hmac.new(secret.encode("utf-8"), payload, hashlib.sha256)
         expected = "sha256=" + mac.hexdigest()
         return hmac.compare_digest(expected, signature_header)
+
+    @staticmethod
+    def list_payments(
+        method: str | None = None,
+        status: str | None = None,
+        date_from: date | None = None,
+        date_to: date | None = None,
+        page: int = 1,
+        page_size: int = 20,
+    ) -> tuple[list[Payment], int, int]:
+        qs = Payment.objects.select_related("sale__cashier").all()
+        if method:
+            qs = qs.filter(method=method)
+        if status:
+            qs = qs.filter(status=status)
+        if date_from:
+            qs = qs.filter(created_at__date__gte=date_from)
+        if date_to:
+            qs = qs.filter(created_at__date__lte=date_to)
+        count = qs.count()
+        total_pages = max(1, math.ceil(count / page_size))
+        page = max(1, min(page, total_pages))
+        offset = (page - 1) * page_size
+        return list(qs[offset : offset + page_size]), count, total_pages
 
     @staticmethod
     def get_payment(payment_id: uuid.UUID) -> Payment:

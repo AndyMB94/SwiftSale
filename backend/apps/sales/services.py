@@ -1,7 +1,10 @@
+import math
 import uuid
+from datetime import date
 from decimal import Decimal
 
 from django.db import transaction
+from django.db.models import Count
 from ninja.errors import HttpError
 
 from apps.products.models import Inventory, InventoryMovement
@@ -143,13 +146,35 @@ class SaleService:
     @staticmethod
     def get_sale(sale_id: uuid.UUID) -> Sale:
         try:
-            return Sale.objects.select_related("cashier").get(id=sale_id)
+            return (
+                Sale.objects.select_related("cashier")
+                .prefetch_related("payments")
+                .get(id=sale_id)
+            )
         except Sale.DoesNotExist:
             raise HttpError(404, "Sale not found")
 
     @staticmethod
-    def list_sales(status: str | None = None) -> list[Sale]:
-        qs = Sale.objects.select_related("cashier").all()
+    def list_sales(
+        status: str | None = None,
+        date_from: date | None = None,
+        date_to: date | None = None,
+        page: int = 1,
+        page_size: int = 20,
+    ) -> tuple[list[Sale], int, int]:
+        qs = (
+            Sale.objects.select_related("cashier")
+            .prefetch_related("payments")
+            .annotate(item_count=Count("items"))
+        )
         if status:
             qs = qs.filter(status=status)
-        return list(qs)
+        if date_from:
+            qs = qs.filter(created_at__date__gte=date_from)
+        if date_to:
+            qs = qs.filter(created_at__date__lte=date_to)
+        count = qs.count()
+        total_pages = max(1, math.ceil(count / page_size))
+        page = max(1, min(page, total_pages))
+        offset = (page - 1) * page_size
+        return list(qs[offset : offset + page_size]), count, total_pages
