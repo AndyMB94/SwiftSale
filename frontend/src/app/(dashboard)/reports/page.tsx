@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import {
   BarChart,
   Bar,
@@ -288,6 +289,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function ReportsPage() {
+  usePageTitle("Reportes");
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Reportes</h1>

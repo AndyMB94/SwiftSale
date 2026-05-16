@@ -34,6 +34,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cancelSale, getSale, getSales } from "@/services/sales";
 import { formatCurrency, formatDateTime } from "@/utils/formatters";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import type { Sale, SaleListItem } from "@/types/sales";
 
 const PAGE_SIZE = 20;
@@ -61,6 +62,7 @@ const STATUS_VARIANTS: Record<
 };
 
 export default function SalesPage() {
+  usePageTitle("Ventas");
   const qc = useQueryClient();
   const router = useRouter();
 

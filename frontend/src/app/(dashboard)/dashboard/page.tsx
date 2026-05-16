@@ -1,3 +1,7 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Dashboard — SwiftSale" };
+
 export default function DashboardPage() {
   return (
     <div className="space-y-1">

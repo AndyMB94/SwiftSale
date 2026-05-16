@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { getAuditLogs } from "@/services/audit";
 import { formatDateTime } from "@/utils/formatters";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import type { AuditLog } from "@/types/audit";
 
 const ACTION_LABELS: Record<string, string> = {
@@ -43,6 +44,7 @@ const TARGET_TYPES = [
 ];
 
 export default function AuditPage() {
+  usePageTitle("Auditoría");
   const [action, setAction] = useState("all");
   const [targetType, setTargetType] = useState("all");
   const [dateFrom, setDateFrom] = useState("");

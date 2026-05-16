@@ -49,6 +49,7 @@ import {
 import { getSale } from "@/services/sales";
 import { formatCurrency, formatDateTime } from "@/utils/formatters";
 import { useAuthStore } from "@/store/authStore";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import type { BillingDocument, CustomerDocumentType } from "@/types/billing";
 import type { Sale } from "@/types/sales";
 
@@ -99,6 +100,7 @@ const EMPTY_FORM: IssueForm = {
 };
 
 export default function BillingPage() {
+  usePageTitle("Facturación");
   const qc = useQueryClient();
   const role = useAuthStore((s) => s.role);
   const searchParams = useSearchParams();

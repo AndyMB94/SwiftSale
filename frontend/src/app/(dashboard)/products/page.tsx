@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ChevronLeft, ChevronRight, Pencil, Plus, Search, Tag, Trash2 } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -66,6 +67,7 @@ const EMPTY_FORM = {
 };
 
 export default function ProductsPage() {
+  usePageTitle("Productos");
   const qc = useQueryClient();
 
   // Filters

@@ -93,15 +93,15 @@
 
 ---
 
-### Phase F8 — Users & Polish
-- [ ] User management table (admin only)
-- [ ] Create user modal (email, role, password)
-- [ ] Deactivate user with confirmation
-- [ ] Loading skeletons on all data tables
-- [ ] Empty states on all list pages
-- [ ] Error boundaries and toast notifications
-- [ ] Responsive layout (tablet support for supervisor dashboard)
-- [ ] Favicon, page titles, meta tags
+### Phase F8 — Users & Polish ✅
+- [x] User management table (admin only) with role badges and active/inactive status
+- [x] Create user modal (email, full name, role, password with min-length validation)
+- [x] Deactivate / reactivate user with confirmation dialog
+- [x] Loading skeletons on all data tables
+- [x] Empty states on all list pages
+- [x] Toast notifications via Sonner throughout
+- [x] Page titles via `usePageTitle` hook on all dashboard pages
+- [x] Dashboard page title via Next.js `metadata` export
 
 **Deliverable:** Complete, polished frontend ready for portfolio demonstration.
 

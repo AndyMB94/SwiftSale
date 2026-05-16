@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ChevronLeft, ChevronRight, History, Search } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,6 +53,7 @@ const MOVEMENT_LABELS: Record<string, string> = {
 };
 
 export default function InventoryPage() {
+  usePageTitle("Inventario");
   const qc = useQueryClient();
 
   const [search, setSearch] = useState("");
