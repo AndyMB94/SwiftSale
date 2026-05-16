@@ -211,7 +211,7 @@ class TestInventoryService:
         normal_product.inventory.quantity = 100
         normal_product.inventory.save()
 
-        low_stock_items = InventoryService.list_inventory(low_stock_only=True)
+        low_stock_items, _, _ = InventoryService.list_inventory(low_stock_only=True)
         ids = [i.product_id for i in low_stock_items]
         assert product.id in ids
         assert normal_product.id not in ids
