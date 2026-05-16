@@ -31,13 +31,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getRevenue, getBestSellers, getInventoryValuation } from "@/services/reports";
 import { formatCurrency } from "@/utils/formatters";
 
+function localDateStr(d: Date) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 function todayStr() {
-  return new Date().toISOString().slice(0, 10);
+  return localDateStr(new Date());
 }
 
 function firstOfMonthStr() {
   const d = new Date();
-  return new Date(d.getFullYear(), d.getMonth(), 1).toISOString().slice(0, 10);
+  return localDateStr(new Date(d.getFullYear(), d.getMonth(), 1));
 }
 
 // ── Revenue tab ───────────────────────────────────────────────────────────────
