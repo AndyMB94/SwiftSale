@@ -1,6 +1,5 @@
 import uuid
 from datetime import date
-from typing import Optional
 
 from django.http import HttpRequest
 from ninja import Router
@@ -30,9 +29,9 @@ def create_sale(request: HttpRequest, payload: SaleCreateInput):
 @router.get("", response=SaleListOut, auth=cookie_auth)
 def list_sales(
     request: HttpRequest,
-    status: Optional[str] = None,
-    date_from: Optional[date] = None,
-    date_to: Optional[date] = None,
+    status: str | None = None,
+    date_from: date | None = None,
+    date_to: date | None = None,
     page: int = 1,
     page_size: int = 20,
 ):

@@ -254,7 +254,9 @@ class Command(BaseCommand):
         # ── Admin user (convenience) ─────────────────────────────────────────
         if not User.objects.filter(role="admin").exists():
             self.stdout.write("")
-            self.stdout.write(self.style.WARNING("No admin user found. Creating one..."))
+            self.stdout.write(
+                self.style.WARNING("No admin user found. Creating one...")
+            )
             User.objects.create_superuser(
                 email="admin@swiftsale.pe",
                 password="admin1234",
