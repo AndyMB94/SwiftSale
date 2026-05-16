@@ -1,52 +1,92 @@
 export interface Category {
-  id: number;
+  id: string;
   name: string;
   description: string;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface CategoryListResponse {
+  count: number;
+  results: Category[];
+}
+
+export interface CategoryCreateInput {
+  name: string;
+  description?: string;
+}
+
+export interface CategoryUpdateInput {
+  name?: string;
+  description?: string;
+  is_active?: boolean;
 }
 
 export interface Product {
-  id: number;
+  id: string;
+  category_id: string;
+  category_name: string;
   name: string;
   description: string;
   sku: string;
   barcode: string | null;
   price: string;
-  category: Category;
   is_active: boolean;
   created_at: string;
 }
 
+export interface ProductListResponse {
+  count: number;
+  results: Product[];
+}
+
 export interface ProductCreateInput {
+  category_id: string;
   name: string;
   description?: string;
   sku: string;
   barcode?: string;
   price: string;
-  category_id: number;
 }
 
-export interface ProductUpdateInput extends Partial<ProductCreateInput> {}
+export interface ProductUpdateInput {
+  category_id?: string;
+  name?: string;
+  description?: string;
+  sku?: string;
+  barcode?: string;
+  price?: string;
+  is_active?: boolean;
+}
 
 export interface InventoryItem {
-  id: number;
-  product: Product;
+  product_id: string;
+  product_name: string;
+  sku: string;
   quantity: number;
-  min_quantity: number;
+  low_stock_threshold: number;
   is_low_stock: boolean;
+  updated_at: string;
 }
 
-export interface StockMovement {
-  id: number;
-  product: number;
-  quantity_change: number;
-  movement_type: "sale" | "purchase" | "adjustment" | "return";
+export interface InventoryAdjustInput {
+  quantity_delta: number;
+  reason: string;
+}
+
+export type MovementType = "sale" | "purchase" | "adjustment" | "return";
+
+export interface InventoryMovement {
+  id: string;
+  movement_type: MovementType;
+  quantity_delta: number;
+  quantity_after: number;
   reason: string;
   created_at: string;
-  created_by: string;
 }
 
 export type AdjustmentReason =
-  | "damaged_goods"
   | "purchase"
   | "return"
+  | "damaged_goods"
   | "correction";

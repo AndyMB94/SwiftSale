@@ -18,13 +18,13 @@
 ---
 
 ### Phase F2 — Products & Inventory
-- [ ] Product list page with search and category filter
-- [ ] Create / edit product slide-over
-- [ ] Soft delete with confirmation dialog
-- [ ] Category management (inline within products page)
-- [ ] Inventory list with low stock highlight
-- [ ] Stock adjustment modal with reason dropdown
-- [ ] Stock movement history per product
+- [x] Product list page with search and category filter
+- [x] Create / edit product slide-over
+- [x] Soft delete with confirmation dialog
+- [x] Category management (inline within products page)
+- [x] Inventory list with low stock highlight
+- [x] Stock adjustment modal with reason dropdown
+- [x] Stock movement history per product
 
 **Deliverable:** Admin and supervisor can fully manage products and stock levels.
 

@@ -7,8 +7,8 @@ interface PosState {
   discount: string;
   paymentMethod: PaymentMethod | null;
   addItem: (product: Product) => void;
-  removeItem: (productId: number) => void;
-  updateQuantity: (productId: number, qty: number) => void;
+  removeItem: (productId: string) => void;
+  updateQuantity: (productId: string, qty: number) => void;
   setDiscount: (discount: string) => void;
   setPaymentMethod: (method: PaymentMethod) => void;
   clearCart: () => void;
